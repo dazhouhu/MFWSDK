@@ -183,7 +183,7 @@ namespace MFW.Core
             return (ErrorNumber)WrapperInterface.sendDTMFKey(callHandle, (int)key);
         }
 
-        public static ErrorNumber GetDeviceEnum(DeviceType deviceType)
+        public static ErrorNumber GetDevice(DeviceType deviceType)
         {
             return (ErrorNumber)WrapperInterface.getDeviceEnum((int)deviceType);
         }

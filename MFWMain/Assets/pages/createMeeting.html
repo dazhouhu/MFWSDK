@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>创建会议</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" type="text/css" href="public/layui/css/layui.css" />
+	<link rel="stylesheet" type="text/css" href="public/font-awesome-4.7.0/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="public/css/commom.css" />
+	<style type="text/css">
+		.body {
+			height: 100%;
+			width: 100%;
+			background: url(public/images/background.jpg);
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+		}
+
+		.createMeeting_container {
+			margin: 10% 10%;
+		}
+
+		.createMeeting_title,
+		.createMeeting_content {
+			background: rgb(56, 74, 86);
+		}
+
+		.createMeeting_title {
+			font-size: 2rem;
+			padding-left: 4rem;
+			position: relative;
+			height: 4rem;
+			line-height: 4rem;
+		}
+
+		.createMeeting_title a {
+			position: absolute;
+			top: 0;
+			left: 0;
+			display: block;
+			text-align: center;
+			width: 4rem;
+			border-right: 2px solid rgb(76, 93, 100);
+		}
+
+		.createMeeting_title p {
+			text-align: center;
+		}
+
+		.createMeeting_content {
+			margin-top: 1rem;
+			padding: 2rem 0 5rem 0;
+			position: relative;
+		}
+
+		.createMeeting_content input {
+			background: none;
+			border-radius: 25px;
+			color: #fff !important;
+		}
+
+		.createMeeting_content_creat {
+			padding-left: 5rem;
+		}
+
+		.createMeeting_content_creat dl {
+			margin-bottom: 2rem;
+			padding-left: 3rem;
+		}
+
+		.createMeeting_content_creat dt a {
+			font-size: 2rem;
+			line-height: 3.5rem;
+		}
+
+		.createMeeting_content_creat dt,
+		.createMeeting_content_creat dd {
+			float: left;
+			margin-left: 1rem;
+			margin-bottom: 0.5rem;
+		}
+
+		.createMeeting_content_creat dt a,
+		.createMeeting_content_creat dd a {
+			height: 4rem;
+			width: 4rem;
+			text-align: center;
+			border-radius: 4rekm;
+			border: 1px solid #fff;
+			border-radius: 4rem;
+		}
+
+		.createMeeting_content_creat dd a {
+			background: rgb(45, 58, 66);
+		}
+
+		.createMeeting_content dd a:hover {
+			background: rgb(16, 160, 233);
+			color: #fff;
+		}
+
+		.createMeeting_content_personnel dd a {
+			line-height: 4rem;
+		}
+
+		.createMeeting_content_meeting dd a p:first-child {
+			padding-top: 0.5rem;
+		}
+
+		.createMeeting_content_creat dt a,
+		.createMeeting_content_creat dd a {
+			display: block;
+		}
+
+		.creat_btn {
+			background: rgb(118, 131, 139);
+			padding: 0 4rem;
+			position: absolute;
+			right: 2rem;
+			bottom: 2rem;
+		}
+
+		#creatPersonnel,
+		#creatMeeting {
+			padding: 1rem 3rem;
+			color: #555;
+		}
+
+		#creatPersonnel ul,
+		#creatMeeting ul {
+			height: 300px;
+			overflow: auto;
+		}
+
+		#creatPersonnel li,
+		#creatMeeting li {
+			margin: 1rem 0;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="creatPersonnel" class="layui-hide">
+
+		<form class="layui-form" action="">
+			<ul>
+				<!--
+				<li><input type="checkbox" name="name" title="陈杰" lay-skin="primary" value="陈杰"></li>
+				<li><input type="checkbox" name="name" title="陈杰" lay-skin="primary" value="陈杰"></li>
+				<li><input type="checkbox" name="name" title="陈杰" lay-skin="primary" value="陈杰"></li>
+				<li><input type="checkbox" name="name" title="陈杰" lay-skin="primary" value="陈杰"></li>
+				-->
+			</ul>
+		</form>
+	</div>
+	<div id="creatMeeting" class="layui-hide">
+
+		<form class="layui-form" action="">
+			<ul>
+				<!--
+				<li><input type="checkbox" name="name" title="江西/立群" lay-skin="primary" value="江西/立群"></li>
+				<li><input type="checkbox" name="name" title="江西/立群" lay-skin="primary" value="江西/立群"></li>
+				<li><input type="checkbox" name="name" title="江西/立群" lay-skin="primary" value="江西/立群"></li>
+				<li><input type="checkbox" name="name" title="江西/立群" lay-skin="primary" value="江西/立群"></li>
+				-->
+			</ul>
+		</form>
+	</div>
+
+
+	<div class="body layui-container">
+		<div class="top layui-clear">
+			<div class="logo">
+				Logo
+			</div>
+			<div class="right_top">
+				<div class="search_input">
+					<div class="serach_ico">
+						<img src="public/images/search.png" />
+					</div>
+					<input type="text" name="search" lay-verify="required" placeholder="搜索联系人" class="">
+				</div>
+			</div>
+		</div>
+		<!--top end-->
+		<div class="createMeeting_container">
+			<div class="createMeeting_title">
+				<a href="meeting.html"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
+				<p>创建会议</p>
+			</div>
+			<div class="createMeeting_content">
+				<div class="layui-row ">
+					<div class="layui-col-xs5 layui-col-sm5 layui-col-md5 layui-col-lg5 ">
+						<form class="layui-form" action="">
+							<div class="layui-form-item">
+								<label class="layui-form-label">会议主题</label>
+								<div class="layui-input-block">
+									<input type="text" name="title" id="txtTitle" required lay-verify="required" placeholder="请输入会议主题" autocomplete="off"
+									 class="layui-input">
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<label class="layui-form-label">会议类型</label>
+								<div class="layui-input-block">
+									<input type="radio" name="style" value="1" title="立即" lay-filter="style" checked>
+									<input type="radio" name="style" value="2" title="预约" lay-filter="style">
+								</div>
+							</div>
+							<div class="layui-form-item start_time layui-hide">
+								<label class="layui-form-label">开始时间</label>
+								<div class="layui-input-block">
+									<input type="text" class="layui-input" id="startTime" placeholder="请输入会议开始时间（yyyy-MM-dd HH:mm）">
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<label class="layui-form-label">会议时长</label>
+								<div class="layui-input-block">
+									<input type="text" name="duration" id="txtDuration" required lay-verify="required" placeholder="请输入会议时长" value=120
+									 autocomplete="off" class="layui-input">
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<label class="layui-form-label">会议密码</label>
+								<div class="layui-input-block">
+									<input type="password" name="code" id="txtCode" required lay-verify="required" placeholder="请输入6-20位会议密码"
+									 autocomplete="off" class="layui-input">
+								</div>
+							</div>
+
+
+						</form>
+					</div>
+					<div class="layui-col-xs7 layui-col-sm7 layui-col-md7 layui-col-lg7 createMeeting_content_creat">
+						<h3>与会者(3)</h3>
+						<dl class="layui-clear createMeeting_content_personnel">
+							<dt><a href="javascript:void(0)" class="creat_new_btn" data-text="与会者"><b>+</b></a></dt>
+							<!--
+							<dd><a href="javascript:void(0)">王涛</a></dd>
+							<dd><a href="javascript:void(0)">王涛涛</a></dd>
+							<dd><a href="javascript:void(0)">王涛涛</a></dd>
+							<dd><a href="javascript:void(0)">王涛涛</a></dd>
+							<dd><a href="javascript:void(0)">王涛涛</a></dd>
+							<dd><a href="javascript:void(0)">王涛涛</a></dd>
+							<dd><a href="javascript:void(0)">王涛涛</a></dd>
+							-->
+						</dl>
+						<h3>会场(3)</h3>
+						<dl class="layui-clear createMeeting_content_meeting">
+							<dt><a href="javascript:void(0)" class="creat_new_btn" data-text="会场"><b>+</b></a></dt>
+							<!--
+							<dd><a href="javascript:void(0)">
+									<p>江西</p>
+									<p>群力</p>
+								</a></dd>
+							<dd><a href="javascript:void(0)">
+									<p>江西</p>
+									<p>群力</p>
+								</a></dd>
+							-->
+						</dl>
+
+					</div>
+					<a href="javascript:void(0)" class="layui-btn  layui-btn-radius layui-btn-normal creat_btn">创&nbsp;建</a>
+				</div>
+			</div>
+		</div>
+		<!--createMeeting_container end-->
+	</div>
+	<script src="public/layui/layui.js"></script>
+
+	<script src="js/utilities.js?token=2018091212"></script>
+	<script type="text/javascript">
+		layui.use(['jquery', 'form', 'layer', 'laydate'], function () {
+			var $ = layui.$;
+			var form = layui.form;
+			var layer = layui.layer;
+			var laydate = layui.laydate;
+			var attenders = [];
+			var venues = [];
+			var loadPersons = function () {
+				$.svc.remoteGet({
+					url: '/api/m/contacts',
+					success: function (result) {
+						if (result.code === 1) {
+							var personalHtmls = '';
+							for (var i = 0; i < result.data.length; i++) {
+								var person = result.data[i];
+								personalHtmls += '<li><input type="checkbox" data-id="' + person.user_id + '" data-name="' + person.realname +
+									'" title="' + person.realname + '" lay-skin="primary" value="' + person.realname + '"></input></li>';
+							}
+							$('#creatPersonnel .layui-form ul').html(personalHtmls);
+							form.render();
+						} else {
+							$.Msg(result.message, 'error');
+						}
+					},
+					error: function (errMsg) {
+						$.Msg(errMsg, 'error');
+					}
+				});
+			};
+			var loadRooms = function () {
+				$.svc.remoteGet({
+					url: '/api/m/meeting/rooms',
+					success: function (result) {
+						if (result.code === 1) {
+							var roomHtmls = '';
+							for (var i = 0; i < result.data.length; i++) {
+								var room = result.data[i];
+								roomHtmls += '<li><input type="checkbox" data-id="' + room.room_id + '" data-name="' + room.name +
+									'" title="' +
+									room.name + '" lay-skin="primary" value="' + room.name + '" ></input></li>';
+							}
+							$('#creatMeeting .layui-form ul').html(roomHtmls);
+							form.render();
+						} else {
+							$.Msg(result.message, 'error');
+						}
+					},
+					error: function (errMsg) {
+						$.Msg(errMsg, 'error');
+					}
+				});
+			};
+			loadPersons();
+			loadRooms();
+
+			laydate.render({
+				elem: '#startTime' //指定元素
+			});
+
+
+			form.on('radio(style)', function (data) {
+				$("#startTime").val("");
+				if (data.value == 2) {
+					$(".start_time").removeClass("layui-hide");
+				} else {
+					$(".start_time").addClass("layui-hide");
+				}
+			});
+
+			$(".creat_new_btn").click(function () { //meetingPassword
+				var $this = $(this);
+				var Text = $this.data("text");
+				if (Text == "与会者") {
+					$("#creatPersonnel").removeClass("layui-hide");
+					$('#creatPersonnel input[type="checkbox"]').prop("checked", false);
+					attenders.forEach(function (attender) {
+						$('#creatPersonnel input[type="checkbox"][data-id="' + attender.id + '"]').prop("checked", true);
+					});
+					form.render('checkbox');
+					layer.open({
+						type: 1,
+						title: '请选择与会者',
+						content: $('#creatPersonnel'),
+						area: ['300px', '500px'],
+						btn: '确定',
+						yes: function (index, layero) {
+							attenders = [];
+							$('.createMeeting_content_personnel dd').remove();
+							var chks = $("#creatPersonnel input:checkbox:checked");
+							for (var i = 0; i < chks.length; i++) {
+								var chkDom = chks.eq(i);
+								var attender = {
+									id: chkDom.data('id'),
+									name: chkDom.data('name')
+								};
+								attenders.push(attender);
+								$('.createMeeting_content_personnel').append('<dd><a href="javascript:void(0)">' + attender.name +
+									'</a></dd>');
+							}
+							$("#creatPersonnel").addClass("layui-hide");
+							layer.close(index);
+						},
+						cancel: function (index, layero) {
+							$("#creatPersonnel").addClass("layui-hide");
+						}
+					});
+				} else {
+					$("#creatMeeting").removeClass("layui-hide");
+					$('#creatMeeting input[type="checkbox"]').prop("checked", false);
+					venues.forEach(function (venue) {
+						$('#creatMeeting input[type="checkbox"][data-id="' + venue.id + '"]').prop("checked", true);
+					});
+					form.render('checkbox');
+					layer.open({
+						type: 1,
+						title: '请选会场',
+						content: $('#creatMeeting'),
+						area: ['300px', '500px'],
+						btn: '确定',
+						yes: function (index, layero) {
+							venues = [];
+							$('.createMeeting_content_meeting dd').remove();
+							var chks = $("#creatMeeting input:checkbox:checked");
+							for (var i = 0; i < chks.length; i++) {
+								var chkDom = chks.eq(i);
+								var venue = {
+									id: chkDom.data('id'),
+									name: chkDom.data('name')
+								};
+								venues.push(venue);
+								$('.createMeeting_content_meeting').append('<dd><a href="javascript:void(0)">' + venue.name +
+									'</a></dd>');
+							}
+							$("#creatMeeting").addClass("layui-hide");
+							layer.close(index);
+						},
+						cancel: function (index, layero) {
+							$("#creatMeeting").addClass("layui-hide");
+						}
+					});
+				}
+			});
+
+			$('.creat_btn').click(function () {
+				var title = $('#txtTitle').val();
+				var type = $('input[type="radio"][name="style"]').val();
+				var startTime = $('#startTime').val();
+				var duration = $('#txtDuration').val();
+				var code = $('#txtCode').val();
+				var x = $(window).width() * 0.7;
+				var y = $(window).height() / 3;
+
+
+				if ($.trim(title) == "") {
+					layer.msg('会议主题不能为空', ({
+						offset: [y, x]
+					}), function () {});
+					return false;
+				}
+				if ($.trim(type) == "") {
+					layer.msg('会议类型必选', ({
+						offset: [y, x]
+					}), function () {});
+					return false;
+				}
+				var now = new Date();
+				if (type == 2) {
+					if ($.trim(startTime) == "") {
+						layer.msg('预约会议开始时间不能为空', ({
+							offset: [y, x]
+						}), function () {});
+						return false;
+					}
+					startTime = new Date(startTime);
+					if (startTime < now) {
+						layer.msg('预约会议开始时间不能早于当前时间', ({
+							offset: [y, x]
+						}), function () {});
+						return false;
+					}
+				} else {
+					startTime = now;
+				}
+				if ($.trim(duration) == "") {
+					layer.msg('会议时间不能为空', ({
+						offset: [y, x]
+					}), function () {});
+					return false;
+				}
+
+				$.svc.remotePost({
+					url: '/api/m/meeting/create',
+					data: {
+						title: title,
+						type: type,
+						start_at: $.DateFormat(startTime,'yyyy-MM-dd HH:mm:ss'),
+						last_time: duration,
+						attender: attenders,
+						venue: venues,
+						conference_code: code
+					},
+					success: function (result) {
+						if (result.code === 1) {
+							if (result.code === 1) {
+								$.Msg('创建成功！', 'success', function() {
+									location.href = "meeting.html"
+								});
+							} else {
+								$.Msg(result.message,'error');
+							}
+						}
+					},
+					error: function (errMsg) {
+						$.Msg(errMsg,'error');
+					}
+				});
+			});
+		});
+	</script>
+</body>
+
+</html>

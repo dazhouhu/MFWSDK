@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	  <meta charset="UTF-8">
+	  <title>拨打电话</title>
+	  <meta name="renderer" content="webkit">
+	  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	  <meta name="apple-mobile-web-app-status-bar-style" content="black"> 
+	  <meta name="apple-mobile-web-app-capable" content="yes">
+	  <meta name="format-detection" content="telephone=no">
+	  <link rel="stylesheet" type="text/css" href="public/layui/css/layui.css"/>
+
+	</head>
+	<body>
+		<style type="text/css">
+		html,
+		body { height: 100%; padding: 0; margin: 0;font-family: "微软雅黑";font-size: 14px;color: white; }
+		.search_input, input::-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   	 color:white; opacity:1; 
+	}
+	
+
+		.search_input, input::-moz-placeholder { /* Mozilla Firefox 19+ */
+			    color:white;opacity:1;
+			}
+			
+		.search_input, input:-ms-input-placeholder{
+			    color:white;opacity:1;
+			}
+			
+		.search_input, input::-webkit-input-placeholder{
+			    color:white;opacity:1;
+			}
+		}
+		.search_input, input::input-placeholder{
+			color:white;
+		}
+		.body{height: 100%;width: 100%;background: url(public/images/background.jpg);background-repeat: no-repeat;background-size: 100% 100%;}
+		.logo{float:left;font-size: 3vw;color: white;}
+		.right_top{float: right;margin-top: 1vw;}
+		.top{width: 96%;margin:0 auto;padding-top:1.5vw;position: relative;height: auto;}
+		.search_input {float: left;width: 20vw;background: rgb(91,109,119);border-radius: 5px;margin-right: 2vw;}
+		.search_input input {float:left;background: rgb(91,109,119);border: none;color: white;height: 2vw;}
+		.optionbutton{float: left;line-height: 1.8vw;}
+		.op:hover{background: rgb(95,118,132);border-radius: 5px;}
+		.op{float: left;padding: 0 0.4vw;cursor: pointer;}
+		.serach_ico{float: left;line-height: 1.8vw;padding: 0 0.5vw;height: 2vw;}
+		.serach_ico img{width: 100%;}
+		.search_input input{width: 85%;}
+		.center_body{width: 82%;height: 60%;text-align: center;margin: 6% auto;}
+		.center_body_left{width: 39.5%;height:100% ;background:rgb(91,109,119) ;float: left;border-radius: 5px;opacity: 0.8;}
+		.center_body_right{width: 59.5%;height: 100%;background: rgb(91,109,119);float: left;margin-left: 1%;border-radius: 5px;opacity: 0.8;}
+		.call_men{text-align: center;padding: 1.6vw 4vw;}
+		.cell{width: 3vw;height: 3vw;border-radius: 3vw;line-height: 3vw;background: rgb(17,161,234);float: left;}
+		.cell_text{font-size: 0.8vw;}
+		.call_men_right{float: left;width: 87%;}
+		.call_men_right p{text-align: left;padding-left: 1.5vw;}
+		.call_men_right_span_name{font-size: 1.1vw;float: left;}
+		.call_men_right_span_time{font-size: 0.8vw;float: right;}
+		.call_men_right_span_tel{padding-left: 0.2vw;font-size: 0.8vw;}
+		.clear{clear: both;}
+		.call_men li{padding-top: 2.5vw;clear: both;}
+		.phonenumber{width: 85%;margin: auto;border-bottom: 1px solid #999999;margin-top: 4%;height: 3vw;}
+		.phonenumber input{border: none;width: 80%;background:rgb(91,109,119) ;height: 1.8vw;text-align: center;color: white;}
+		.delimg{float: right;height: 1.8vw;line-height: 1.8vw;cursor: pointer;}
+		
+		.delimg img{width: 100%;}
+		.keyboard{width:30%;margin: auto;height: 78%;margin-top: 2%;}
+		.number{width: 100%;}
+		.number li{width: 33.333%;height: 4vw;float: left;line-height: 4vw;cursor: pointer;font-size: 2vw;display: block;}
+		.call_out{text-align: center;width: 100%;margin-top: 2vw;height: 2vw;cursor: pointer;}
+		.bottom{width: 50%;margin: 0 auto;text-align: center;height: 10%;}
+		.bottom li{padding: 3vw 2vw;float: left;width: 3vw;}
+		.bottom img{cursor: pointer;}
+		.bottom p{padding-top: 0.8vw;text-align: center;font-size: 0.8vw;}
+		</style>
+		<div class="body">
+			<div class="top">
+				<div class="logo">
+				Logo
+			</div>
+			<div class="right_top">
+				<div class="search_input">
+					<div class="serach_ico">
+						<img src="public/images/search.png"/>
+					</div>
+					
+						<input type="text" name="search"  lay-verify="required"  placeholder="搜索联系人" class="">
+					
+				</div>
+				<div class="optionbutton">
+					<div class="op">
+						<img src="public/images/min.png"/>
+					</div>
+					<div class="op">
+						<img src="public/images/max.png"/>
+						</div>
+					<div class="op">
+						<img src="public/images/close2.png"/>
+					</div>
+					
+				</div>
+			</div>
+			</div>
+			
+			<div class="center_body">
+				<div class="center_body_left">
+					<div class="call_men">
+						<ul>
+							<li>
+								<div class="cell">
+									<span class="cell_text">
+										王涛
+									</span>
+								</div>
+								<div class="call_men_right">
+									<p class="">
+										<span class="call_men_right_span_name">
+										王涛	
+										</span>
+										<span class="call_men_right_span_time">
+										18:00	
+										</span>
+									</p>
+									<p class="clear">
+										<img src="public/images/outcall.png" class="call_men_right_img"/>
+										<span class="call_men_right_span_tel">
+											+9911526995
+										</span>
+									</p>
+								</div>
+							</li>
+							
+							<li>
+								<div class="cell">
+									<span class="cell_text">
+										王涛
+									</span>
+								</div>
+								<div class="call_men_right">
+									<p class="">
+										<span class="call_men_right_span_name">
+										王涛	
+										</span>
+										<span class="call_men_right_span_time">
+										18:00	
+										</span>
+									</p>
+									<p class="clear">
+										<img src="public/images/outcall.png" class="call_men_right_img"/>
+										<span class="call_men_right_span_tel">
+											+9911526995
+										</span>
+									</p>
+								</div>
+							</li>
+							
+							
+							<li>
+								<div class="cell">
+									<span class="cell_text">
+										王涛
+									</span>
+								</div>
+								<div class="call_men_right">
+									<p class="">
+										<span class="call_men_right_span_name">
+										王涛	
+										</span>
+										<span class="call_men_right_span_time">
+										18:00	
+										</span>
+									</p>
+									<p class="clear">
+										<img src="public/images/outcall.png" class="call_men_right_img"/>
+										<span class="call_men_right_span_tel">
+											+9911526995
+										</span>
+									</p>
+								</div>
+							</li>
+							
+							
+							<li>
+								<div class="cell">
+									<span class="cell_text">
+										王涛
+									</span>
+								</div>
+								<div class="call_men_right">
+									<p class="">
+										<span class="call_men_right_span_name">
+										王涛	
+										</span>
+										<span class="call_men_right_span_time">
+										18:00	
+										</span>
+									</p>
+									<p class="clear">
+										<img src="public/images/outcall.png" class="call_men_right_img"/>
+										<span class="call_men_right_span_tel">
+											+9911526995
+										</span>
+									</p>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="center_body_right">
+					<div class="phonenumber">
+				      <input type="text" name="phonenumber" lay-verify="required" placeholder="请输入号码" class="phone" >
+				      <div class="delimg">
+				      	<img src="public/images/calldel.png"/>
+				      </div>
+				    </div>
+				    <div class="keyboard">
+				    	<div class="number">
+				    		<ul>
+				    			<li>1</li>
+				    			<li>2</li>
+				    			<li>3</li>
+				    			<li>4</li>
+				    			<li>5</li>
+				    			<li>6</li>
+				    			<li>7</li>
+				    			<li>8</li>
+				    			<li>9</li>
+				    			<li>*</li>
+				    			<li>0</li>
+				    			<li>#</li>
+				    		</ul>
+				    		<div class="call_out">
+				    			<img src="public/images/callout.png"/>
+				    		</div>
+				    	</div>
+				    </div>
+				</div>
+				<div class="bottom">
+				<ul>
+					<li id="huiyi"><img src="public/images/10-1@2x.png"/><p>会议</p></li>
+					<li id="lianxiren"><img src="public/images/11@2x.png"/><p>联系人</p></li>
+					<li id="hujiao"><img src="public/images/12@2x.png"/><p>呼叫</p></li>
+					<li id="shezhi"><img src="public/images/13@2x.png"/><p>设置</p></li>
+					<li id="tuichu"><img src="public/images/14@2x.png"/><p>退出</p></li>
+				</ul>
+			</div>
+			</div>
+			
+		</div>
+		<script src="public/layui/layui.js"></script>
+
+		<script type="text/javascript">
+			layui.use(['jquery', 'form','layer'], function () {
+				
+				var $ = layui.$ ;
+        		var form = layui.form;
+        		var layer = layui.layer;
+        		$(".number").find("li").click(function(){
+        			var number=$(this).html();
+        			number=$('input[name="phonenumber"]').val()+number
+        			$('input[name="phonenumber"]').val(number)
+        		})
+        		$(".delimg").click(function(){
+        			var number=$('input[name="phonenumber"]').val();
+        			number=number.substring(0,number.length-1);
+        			$('input[name="phonenumber"]').val(number)
+        		})
+        		
+        		
+        	 $(document).on('input propertychange','.phone',function (e) {
+		        _self = $(this);
+		       
+		        _self.val(_self.val().replace(/[^\d*#]/g,''))//只能输入*#数字
+		
+		    });
+		    $("#huiyi").hover(function(){	
+				$(this).find("img").attr("src","public/images/10@2x.png");
+				$(this).find("p").css("font-size","1vw");
+			},function(){
+				$(this).find("img").attr("src","public/images/10-1@2x.png");
+				$(this).find("p").css("font-size","0.8vw");
+			});
+			
+			
+			$("#tuichu").hover(function(){	
+				$(this).find("img").attr("src","public/images/14-1@2x.png");
+				$(this).find("p").css("font-size","1vw");
+			},function(){
+				$(this).find("img").attr("src","public/images/14@2x.png");
+				$(this).find("p").css("font-size","0.8vw");
+			});
+			
+			
+			
+			$("#shezhi").hover(function(){	
+				$(this).find("img").attr("src","public/images/13-1@2x.png");
+				$(this).find("p").css("font-size","1vw");
+			},function(){
+				$(this).find("img").attr("src","public/images/13@2x.png");
+				$(this).find("p").css("font-size","0.8vw");
+			});
+			
+			
+			
+			$("#lianxiren").hover(function(){	
+				$(this).find("img").attr("src","public/images/11-1@2x.png");
+				$(this).find("p").css("font-size","1vw");
+			},function(){
+				$(this).find("img").attr("src","public/images/11@2x.png");
+				$(this).find("p").css("font-size","0.8vw");
+			});
+			
+			
+			
+			$("#hujiao").hover(function(){	
+				$(this).find("img").attr("src","public/images/12-1@2x.png");
+				$(this).find("p").css("font-size","1vw");
+			},function(){
+				$(this).find("img").attr("src","public/images/12@2x.png");
+				$(this).find("p").css("font-size","0.8vw");
+			});
+
+   			 });
+		</script>
+	</body>
+</html>

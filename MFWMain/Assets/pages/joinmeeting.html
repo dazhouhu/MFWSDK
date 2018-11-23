@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	  <meta charset="UTF-8">
+	  <title>加入会议</title>
+	  <meta name="renderer" content="webkit">
+	  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	  <meta name="apple-mobile-web-app-status-bar-style" content="black"> 
+	  <meta name="apple-mobile-web-app-capable" content="yes">
+	  <meta name="format-detection" content="telephone=no">
+	  <link rel="stylesheet" type="text/css" href="public/layui/css/layui.css"/>
+
+	</head>
+	<body>
+		<style type="text/css">
+		html,
+		body { height: 100%; padding: 0; margin: 0;font-family: "微软雅黑";font-size: 14px; }
+		.left  {height: 100%;width: 50%;background: url(public/images/leftbackground.jpg);background-repeat: no-repeat;background-size: 100% 100%;}
+		.right { height: 100%;width: 50%;background: white;position: absolute;top: 0;right: 0;text-align: center;}
+		
+		.left_bottom_text{position: absolute;top: 80%;left: 4%;}
+		.left_bottom_text_1{font-size: 1.75vw;color: white;font-weight: bold;}
+		.left_bottom_text_2{font-size: 1.2vw;color: white;margin-top: 1vw;}
+		.right_box{width: 80%;text-align: left;background: white;padding: 10% 10%;}
+		.login_title{width: 100%;}
+		.login_title p{color: rgb(17,161,234);font-size: 3vw;}
+		.login_form{margin-top: 3vw;}
+		.login_button{margin-top: 3vw;}
+		.login_tips{width: 100%;margin-top: 4vw;}
+		.login_tips p{color: rgb(17,161,234);font-size: 0.8vw;margin-bottom: 0.2vw;}
+		.left_bottom_text{position: absolute;top: 75%;left: 4%;}
+		.left_bottom_text_1{font-size: 1.75vw;color: white;font-weight: bold;}
+		.left_bottom_text_2{font-size: 1.2vw;color: white;margin-top: 1vw;}
+		.input-left{float: left;}
+			/*遮罩层*/
+	.fade{
+		display: none;
+	    width:50%;
+	    height:100%;
+	    background:rgba(0, 0, 0, 0.3);
+	    position: fixed;
+	    right: 0;
+	    top: 0;
+	    z-index: 999;
+	}
+	/*弹出层*/ 
+	.succ-pop{
+		display: none;
+	    width: 30%;
+	    height: 40%;
+	    background: #fff;
+	    position: fixed;
+	    margin: auto;
+	   
+	    right: 10%;
+	    top: 24%;
+	    /*bottom: 0;*/
+	    z-index: 9999;
+	    border-radius: 8px;
+	}   
+	.succ-pop h3.title{
+	    text-align: center;
+	    font-size: 22px;
+	    color: #ce002c;
+	}
+	#close{
+		
+	   
+	    top: 2.2vw;
+	    right: 2.2vw;
+	    position: absolute;
+	}
+	#close:hover{
+		cursor: pointer;
+		 
+		}
+	.pass{width: 80%;margin: auto;border-bottom: 1px solid #ccc;margin-top: 30%;height: 2vw;}
+	.pass input{border: none;width: 100%;}
+	.submitbutton{width: 90%;margin: auto;padding-top: 10%;}
+	 #submitbutton{width: 100%;}
+		</style>
+		<div class="left">
+	    <div class="left_bottom_text">
+	    	<p class="left_bottom_text_1">视频协作  睿智之选</p>
+	    	<p class="left_bottom_text_2">带来卓越的沉浸式远程视频会议协作体验</p>
+	    </div>
+		</div>
+		<div class="right">
+			<div class="right_box">
+				<div class="login_title">
+					<p>加入会议</p>
+				</div>
+				<form class="layui-form login_form" action="javascript:;">
+				 <div class="layui-form-item">
+			    <div class="">
+			      <input type="text" name="memberid"  lay-verify="required"  placeholder="输入会员ID" class="layui-input">
+			    </div>
+			  </div>
+			  
+			   <div class="layui-form-item">
+			    <div class="">
+			      <input type="text" name="nickname"  lay-verify="required"  placeholder="昵称" class="layui-input">
+			    </div>
+			  </div>
+			  
+			 <div class="layui-form-item" pane="" style="margin-left: -2.5vw;">
+			 <div class="layui-inline">
+		    <label class="layui-form-label">摄像头</label>
+		    <div class="input-left">
+		      <input type="checkbox"  name="camera" lay-skin="switch" lay-filter="switchTest" title="摄像头">
+		    </div>
+		    </div>
+		    <div class="layui-inline">
+		    <label class="layui-form-label" style="margin-left: -2.5vw;">麦克风</label>
+		    <div class="input-left">
+		      <input type="checkbox" checked=""  name="microphone" lay-skin="switch" lay-filter="switchTest" title="麦克风">
+		    </div>
+		    </div>
+		  </div>
+		  
+		   <div class="layui-form-item login_button">
+		    <div class="">
+		      <button class="layui-btn layui-btn-normal" style="margin-left:0;background: rgb(107,107,107);width: 7vw;" id="cancel">取消</button>
+		      <button class="layui-btn layui-btn-normal " style="margin-left: 3vw;width: 7vw;" id="join">加入</button>
+		    </div>
+		  </div>
+				</form>
+				
+			
+			</div>
+		</div>
+		<div class="fade" id="fa" style=""></div>
+		<div class="succ-pop" id="su" style="" data-anim="layui-anim-up">
+			
+			    <div class="pass">
+			      <input type="password" name="password" lay-verify="required" placeholder="请输入会议密码" class="" >
+			    </div>
+			    <div class="submitbutton">
+			    	<button class="layui-btn layui-btn-normal layui-btn-radius" id="submitbutton">确定</button>
+			    </div>
+			  
+   		<div id="close" ><img src="public/images/close.png"/></div>
+		</div>
+
+		<script src="public/layui/layui.js"></script>
+
+		<script type="text/javascript">
+			layui.use(['jquery', 'form','layer'], function () {
+				
+				var $ = layui.$ ;
+        		var form = layui.form;
+        		var layer = layui.layer;
+        		$('input[name="memberid"]').focus();
+        		$("#join").click(function(){
+        			//prompt层
+        			$("#fa").css("display","block")
+        			$("#su").css("display","block")
+        			$('input[name="password"]').focus();
+        		})
+        		$("#close").click(function(){
+        			//prompt层
+        			$("#fa").css("display","none")
+        			$("#su").css("display","none")
+
+        		})
+        		$("#cancel").click(function(){
+        			window.history.go(-1);
+        		})
+   			 });
+		</script>
+	</body>
+</html>

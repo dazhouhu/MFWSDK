@@ -1,0 +1,33 @@
+
+html,body { height: 100%; padding: 0; margin: 0;font-family: "微软雅黑";font-size: 14px;color: white; }
+	a{color:#fff;}
+
+/* search_input */
+.search_input, input::-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   	 color:white; opacity:0.8; 
+	}
+	
+
+.search_input, input::-moz-placeholder { /* Mozilla Firefox 19+ */
+		color:white;opacity:0.8;
+	}
+	
+.search_input, input:-ms-input-placeholder{
+		color:white;opacity:0.8;
+	}
+	
+.search_input, input::-webkit-input-placeholder{
+		color:white;opacity:0.8;
+	}
+}
+.search_input, input::input-placeholder{
+	color:white;
+}
+.logo{float:left;font-size: 3vw;color: white;}
+.right_top{float: right;margin-top: 1vw;}
+.top{width: 96%;margin:0 auto;padding-top:1.5vw;position: relative;height: auto;}
+.search_input {float: left;width: 20vw;background: rgb(91,109,119);border-radius: 5px;margin-right: 2vw;}
+.search_input input {float:left;background: rgb(91,109,119);border: none;color: white;height: 2vw;}
+.serach_ico{float: left;line-height: 1.8vw;padding: 0 0.5vw;height: 2vw;}
+.serach_ico img{width: 100%;}
+.search_input input{width: 85%;}

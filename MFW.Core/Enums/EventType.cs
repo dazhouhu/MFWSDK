@@ -2,68 +2,58 @@
 {
     public enum EventType
     {
-        UNKNOWN = 0
+        UNKNOWN,
 
-        ,SIP_REGISTER_SUCCESS   			/**< Successful registered to SIP server. */
-        ,SIP_REGISTER_FAILURE   				/**< Failed to register to SIP server. */
-        ,SIP_REGISTER_UNREGISTERED            /**< Unregistered to SIP server. */
+        SIP_REGISTER_SUCCESS,                       /*1 with SIP server from CC*/
+        SIP_REGISTER_FAILURE,                       /*2 from CC */
+        SIP_REGISTER_UNREGISTERED,                  /*3 Unregister client. */
 
-        ,SIP_CALL_INCOMING  					/**< A SIP call is coming. */
-        ,SIP_CALL_TRYING                      /**< A SIP call is trying. */
-        ,SIP_CALL_RINGING                     /**< Far end  is ringing. */
-        ,SIP_CALL_FAILURE                     /**< A SIP call has failed.  */
-        ,SIP_CALL_CLOSED       				/**< A SIP Call has closed. */
-        ,SIP_CALL_HOLD       					/**< A SIP Call is held by local side. */
-        ,SIP_CALL_HELD       					/**< A SIP Call is held by remote side. */
-        ,SIP_CALL_DOUBLE_HOLD       			/**< A SIP Call is held by both sides. */
-        ,SIP_CALL_UAS_CONNECTED   			/**< A SIP Call is connected on callee side. */
-        ,SIP_CALL_UAC_CONNECTED  				/**< A SIP Call is connected on caller side. */
+        SIP_CALL_INCOMING,                          /*4 UAS received INVITE, from CC */
+        SIP_CALL_TRYING,                            /*5< A SIP call is trying. */
+        SIP_CALL_RINGING,                           /*6 UAC get 180 from CC */
+        SIP_CALL_FAILURE,                           /*7 from CC */
+        SIP_CALL_CLOSED,                            /* 8UAS get terminated from CC */
+        SIP_CALL_HOLD,                              /* 9local hold */
+        SIP_CALL_HELD,                              /* 10far site hold */
+        SIP_CALL_DOUBLE_HOLD,                       /* 11both far-site and local hold */
+        SIP_CALL_UAS_CONNECTED,                     /* 12from CC */
+        SIP_CALL_UAC_CONNECTED,                     /* 13from CC */
 
-        ,SIP_CONTENT_INCOMING					/**< SIP content is coming. */
-        ,SIP_CONTENT_CLOSED					/**< SIP incoming content is closed. */
-        ,SIP_CONTENT_SENDING					/**< SIP content is being sent. */
-        ,SIP_CONTENT_IDLE						/**< SIP content is idle or not being sent. */
-        ,SIP_CONTENT_UNSUPPORTED				/**< SIP content is not supported. */
+        SIP_CONTENT_INCOMING,                       /*14from MP*/
+        SIP_CONTENT_CLOSED,                         /*15*/
+        SIP_CONTENT_SENDING,                        /*16*/
+        SIP_CONTENT_IDLE,                           /*17Indicates SIP content is idle & not sent now*/
+        SIP_CONTENT_UNSUPPORTED,                    /*18*/
 
-        ,DEVICE_VIDEOINPUTCHANGED   			/**< Video input device is changed. */
-        ,DEVICE_AUDIOINPUTCHANGED 			/**< Audio input device is changed. */
-        ,DEVICE_AUDIOOUTPUTCHANGED 			/**< Audio output device is changed. */
-        ,DEVICE_VOLUMECHANGED   				/**< Not used for now. Volume of audio output device changed. */
-        ,DEVICE_MONITORINPUTSCHANGED  		/**< Monitor input device is changed. */
+        DEVICE_VIDEOINPUTCHANGED,                   /* 19from MP */
+        DEVICE_AUDIOINPUTCHANGED,                   /* 20from MP */
+        DEVICE_AUDIOOUTPUTCHANGED,                  /* 21from MP */
+        DEVICE_VOLUMECHANGED,                       /* 22from MP */
+        DEVICE_MONITORINPUTSCHANGED,                /* 23from MP */
 
-        ,STREAM_VIDEO_LOCAL_RESOLUTIONCHANGED /**< Local video stream is ready to display with the resolution. */
-        ,STREAM_VIDEO_REMOTE_RESOLUTIONCHANGED/**< Remote video stream is ready to display with the resolution. */
+        STREAM_VIDEO_LOCAL_RESOLUTIONCHANGED,       /*24from MP*/
+        STREAM_VIDEO_REMOTE_RESOLUTIONCHANGED,      /*25from MP*/
 
-        ,NETWORK_CHANGED                      /**< Network connectivity is changed or lost. */
+        NETWORK_CHANGED,                            /* 26when network is changed or lost. */
+        MFW_INTERNAL_TIME_OUT,                      /* 27if receive this notification, there is an fatal error in mfw, app should show warning message then exit app. */
+        REFRESH_ACTIVE_SPEAKER,                     /* 28SVC msg */
+        REMOTE_VIDEO_REFRESH,                       /* 29SVC msg */
 
-        ,INTERNAL_TIME_OUT                    /**< Exchange message timeout in SDK internal components after user application invokes a function. */
+        REMOTE_VIDEO_CHANNELSTATUS_CHANGED,         /* 30SVC msg */
+        REMOTE_VIDEO_DISPLAYNAME_UPDATE,            /* 31Remote video status is changed. */
+        SIP_CALL_MODE_CHANGED,                      /*32Indicates call mode is changed. */
+        SIP_CALL_MODE_UPGRADE_REQ,                  /*33Indicates receiving an audio-video call upgrade request. */
+        IS_TALKING_STATUS_CHANGED,                  /*34*/
+        CERTIFICATE_VERIFY,                         /*35 Certifate needs user trust.*/
+        TRANSCODER_FINISH,                          /*36 transcoding finish*/
+        ICE_STATUS_CHANGED,                         /*37 Notify ICE status. */
+        SUTLITE_INCOMING_CALL,                      /*38 Notify SUTLite incoming call. */
+        SUTLITE_TERMINATE_CALL,                     /*39 Notify SUTLite terminate call. */
 
-        ,REFRESH_ACTIVE_SPEAKER               /**< The active speaker in the SVC conference is changed. */
-        ,REMOTE_VIDEO_REFRESH                 /**< A number of remote streams arrived in the call. */
-        ,REMOTE_VIDEO_STATUSCHANGED			/**< The remote stream arrived in the call. */
-        ,REMOTE_VIDEO_DISPLAYNAME_UPDATE      /**< The remote stream participant's name in SVC conference is changed. */
-
-        ,SIP_CALL_MODE_CHANGED                /**< Indicates call mode is changed. */
-        ,SIP_CALL_MODE_UPGRADE_REQ            /**< Indicates receiving an audio-video call upgrade request. */
-
-        ,TALKING_STATUS_CHANGED				/**< Indicates talking status changed. */
-
-        ,CERTIFICATE_VERIFY                   /**< Certificate needs user trust.*/
-        ,TRANSCODER_FINISH                    /**< Transcoder finished.*/
-
-        ,ICE_STATUS_CHANGED                   /**< Notify ICE status. */
-
-        ,SUTLITE_INCOMING_CALL               /**< Notify SUTLite incoming call. Only applicable for Windows and Mac. */
-        ,SUTLITE_TERMINATE_CALL              /**< Notify SUTLite terminate call. Only applicable for Windows and Mac. */
-
-        ,NOT_SUPPORT_VIDEOCODEC              /**< Video call is not supported because video codec is not supported. */
-
-        ,BANDWIDTH_LIMITATION                /**< Notify network bandwidth  limitation status. */
-
-        ,MEDIA_ADDRESS_UPDATED               /**< Notify media IP address updated. */
-
-        ,AUTODISCOVERY_STATUS_CHANGED         /**< Notify http tunnel auto discovery status changed. */
-
-        //MORE...
+        NOT_SUPPORT_VIDEOCODEC,                     /*40 Video call is not supported for video codec is not supported. */
+        BANDWIDTH_LIMITATION,                       /*41 Notify network bandwidth is limitation status. */
+        MEDIA_ADDRESS_UPDATED,                      /*42 Notify media IP address updated. */
+        AUTODISCOVERY_STATUS_CHANGED                /*43 Notify http tunnel auto discovery status changed. */
+                                                   //MORE...
     }
 }

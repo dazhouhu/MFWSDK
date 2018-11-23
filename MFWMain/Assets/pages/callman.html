@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	  <meta charset="UTF-8">
+	  <title>联系人</title>
+	  <meta name="renderer" content="webkit">
+	  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	  <meta name="apple-mobile-web-app-status-bar-style" content="black"> 
+	  <meta name="apple-mobile-web-app-capable" content="yes">
+	  <meta name="format-detection" content="telephone=no">
+	  <link rel="stylesheet" type="text/css" href="public/layui/css/layui.css"/>
+	  <link rel="stylesheet" type="text/css" href="public/font-awesome-4.7.0/css/font-awesome.min.css"/>
+	</head>
+	<body>
+		<style type="text/css">
+		html,
+		body { height: 100%; padding: 0; margin: 0;font-family: "微软雅黑";font-size: 14px;color: white; }
+		.search_input, input::-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   		 color:white; opacity:1; 
+			}
+	
+
+		.search_input, input::-moz-placeholder { /* Mozilla Firefox 19+ */
+			    color:white;opacity:1;
+			}
+			
+		.search_input, input:-ms-input-placeholder{
+			    color:white;opacity:1;
+			}
+			
+		.search_input, input::-webkit-input-placeholder{
+			    color:white;opacity:1;
+			}
+		}
+		.search_input, input::input-placeholder{
+			color:white;
+		}
+		.body{height: 100%;width: 100%;background: url(public/images/background.jpg);background-repeat: no-repeat;background-size: 100% 100%;}
+		.logo{float:left;font-size: 3rem;color: white;}
+		.right_top{float: right;margin-top: 1rem;}
+		.top{width: 96%;margin:0 auto;padding-top:1.5rem;position: relative;height: auto;}
+		.search_input {float: left;width: 23rem;background: rgb(91,109,119);border-radius: 5px;margin-right: 2.2rem;}
+		.search_input input {float:left;background: rgb(91,109,119);border: none;color: white;height: 2.2rem;}
+		.optionbutton{float: left;line-height: 2rem;}
+		.op:hover{background: rgb(95,118,132);border-radius: 5px;}
+		.op{float: left;padding: 0 0.4rem;cursor: pointer;}
+		.serach_ico{float: left;line-height: 2rem;padding: 0 0.5rem;height: 2.2rem;}
+		.serach_ico img{width: 100%;}
+		.search_input input{width: 85%;}
+		.center_body{width: 82%;text-align: center;margin: auto;margin-top: 6%;}
+		.bg{background: rgb(91,109,119);}
+		.titlenav{border: none;border-radius:5px;}
+		.titlenav li{width: 20%;height: 5rem;line-height: 2.9rem;float: left;color: white;font-size: 1.5rem;}
+		.tablebodydiy{width:96%;margin: auto;margin-top: 2rem;border-radius: 5px;color: white;border-collapse: collapse;border-spacing: 0;}
+    	.tablebodydiy tr{height: 7rem;border-bottom: 1px solid #999999;}
+		.tablebodydiy td{width: 20%;text-align: center;letter-spacing:0.2rem;}
+		.tablebodydiy td img{padding: 0 1rem;}
+		.tablebodydiy tr:last-child{border: none;}
+		.tablecon{width: 100%;text-align: center;border-radius: 5px;}
+		.cell{width: 3rem;height: 3rem;border-radius: 3rem;line-height: 3rem;background: rgb(17,161,234);margin: auto;text-align: center;}
+		.cell_text{font-size: 0.8rem;}
+		.bottom1{width: 100%;max-height: 5rem;margin-top: 2%;}
+		.next{width: 3rem;margin: auto;cursor: pointer;}
+		.diyico{font-size: 2rem;}
+		.page{width: 6rem;float: right;}
+		.p1{font-size: 1.5rem;}
+		.video{cursor: pointer;}
+		.call{cursor: pointer;}
+		.bottom{width: 40%;margin: 0 auto;text-align: center;height: 10%;margin-top: 2%;}
+		.bottom li{padding: 3% 4.8%;float: left;width: 10%;}
+		.bottom img{cursor: pointer;}
+		.bottom p{padding-top: 1rem;text-align: center;font-size: 1rem;}
+		.pop_content{width: 34%;height: 80%;margin: auto;margin-top: 13%;}
+		.pop_name{font-size: 1.2rem;color: black;text-align: center;padding-top: 0.8rem;}
+		.pop_content_color{color: #999999;padding-top: 1rem; }
+		.pop_content_video{color: black;font-size: 1.3rem;line-height: 1.3rem;}
+		.pop_content_call{color: black;font-size: 1.3rem;padding-left: 0.8rem;line-height: 1.3rem;}
+		.fade{
+		display: none;
+	    width:100%;
+	    height:100%;
+	    background:rgba(0, 0, 0, 0.3);
+	    position: fixed;
+	    right: 0;
+	    top: 0;
+	    z-index: 999;
+	}
+	/*弹出层*/ 
+	.succ-pop{
+		display: none;
+	    width: 29%;
+	    height: 50%;
+	    background: #fff;
+	    position: fixed;
+	    margin: auto;
+	   
+	    right: 35%;
+	    top: 24%;
+	    /*bottom: 0;*/
+	    z-index: 9999;
+	    border-radius: 8px;
+	}   
+	
+	#close{
+		
+	   
+	    top: 2.3rem;
+	    right: 2.3rem;
+	    position: absolute;
+	}
+	#close:hover{
+		cursor: pointer;
+		 
+		}
+		</style>
+		<div class="body">
+			<div class="top">
+				<div class="logo">
+				Logo
+			</div>
+			<div class="right_top">
+				<div class="search_input">
+					<div class="serach_ico">
+						<img src="public/images/search.png"/>
+					</div>
+					
+						<input type="text" name="search"  lay-verify="required"  placeholder="搜索联系人" class="">
+					
+				</div>
+				<div class="optionbutton">
+					<div class="op">
+						<img src="public/images/min.png"/>
+					</div>
+					<div class="op">
+						<img src="public/images/max.png"/>
+						</div>
+					<div class="op">
+						<img src="public/images/close2.png"/>
+					</div>
+					
+				</div>
+			</div>
+			</div>
+			
+			<div class="center_body">
+			
+		        <div class="layui-card-header bg titlenav">
+		        	<ul>
+		        		<li><span style="margin-left: 1rem;">头像</span></li>
+		        		<li><span style="margin-left: 1rem;">姓名</span></li>
+		        		<li><span >账号</span></li>
+		        		<li><span style="margin-left: -1rem;">部门</span></li>
+		        		<li><span style="margin-left: -2rem;">拨号</span></li>
+		        	</ul>
+		        </div>
+		        <div class="tablecon bg">
+		        <table class=" tablebodydiy bg"   lay-skin="nob">
+				  
+				  <tbody>
+				    <tr>
+				      <td><div class="cell"><span class="cell_text">王涛</span></div></td>
+				      <td>王涛</td>
+				      <td>hasd@am</td>
+				      <td>群里现代</td>
+				      <td>
+				      	<span class="video" ><img src="public/images/video.png"/></span>
+				      	<span class="call"><img src="public/images/a@2x.png"/></span>
+				      </td>
+				      
+				    </tr>
+				     <tr>
+				      <td><div class="cell"><span class="cell_text">王涛</span></div></td>
+				      <td>王涛</td>
+				      <td>hasd@am</td>
+				      <td>群里现代</td>
+				      <td>
+				      	<span id="video" ><img src="public/images/video.png"/></span>
+				      	<span id="call"><img src="public/images/a@2x.png"/></span>
+				      </td>
+				      
+				    </tr>
+				     <tr>
+				      <td><div class="cell"><span class="cell_text">王涛</span></div></td>
+				      <td>王涛</td>
+				      <td>hasd@am</td>
+				      <td>群里现代</td>
+				      <td>
+				      	<span id="video" ><img src="public/images/video.png"/></span>
+				      	<span id="call"><img src="public/images/a@2x.png"/></span>
+				      </td>
+				      
+				    </tr>
+				    
+
+				  </tbody>
+				</table> 
+				
+		      </div> 
+		   </div> 
+		   <div class="bottom1">
+		   	<div class="page">
+		   		<span class="p1">1</span>
+		   		<span class="p2">/</span>
+		   		<span class="p3">2</span>
+		   	</div>
+		   	<div class="next">
+		   		<i class="layui-icon layui-icon-down diyico"></i> 
+		   	</div>
+		   	
+		   </div>
+		   
+		   <div class="bottom">
+				<ul>
+					<li id="huiyi"><img src="public/images/10-1@2x.png"/><p>会议</p></li>
+					<li id="lianxiren"><img src="public/images/11@2x.png"/><p>联系人</p></li>
+					<li id="hujiao"><img src="public/images/12@2x.png"/><p>呼叫</p></li>
+					<li id="shezhi"><img src="public/images/13@2x.png"/><p>设置</p></li>
+					<li id="tuichu"><img src="public/images/14@2x.png"/><p>退出</p></li>
+				</ul>
+			</div>
+	 </div> 
+		   
+		   <div class="fade" id="fa" style=""></div>
+		<div class="succ-pop" id="su" style="" data-anim="layui-anim-up">
+		<div class="pop_content">
+			<ul>
+				<li><div class="cell"><span class="cell_text">王涛</span></div></li>
+				<li><div class="pop_name"><span >王涛</span></div></li>
+				<li class="pop_content_color">账&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号&nbsp;：&nbsp;122457@yg</li>
+				<li class="pop_content_color">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别&nbsp;：&nbsp;男</li>
+				<li class="pop_content_color">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位&nbsp;：&nbsp;暂无</li>
+				<li class="pop_content_color">部&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;门&nbsp;：&nbsp;现代群立</li>
+				<li class="pop_content_color">电子邮箱：&nbsp;暂无</li>
+				<li class="pop_content_color">
+				<span >硬终端电话</span>&nbsp;
+				<span class="video pop_content_video" ><i class="fa fa-video-camera" aria-hidden="true"></i></span>
+				<span class="call pop_content_call"><i class="fa fa-phone" aria-hidden="true"></i></span></li>
+			</ul>
+		</div>
+			  
+   		<div id="close" ><img src="public/images/close.png"/></div>
+		</div>
+		     
+ 		
+		<script src="public/layui/layui.js"></script>
+
+		<script type="text/javascript">
+			layui.use(['jquery', 'form','layer'], function () {
+				
+				var $ = layui.$ ;
+        		var form = layui.form;
+        		var layer = layui.layer;
+        		$(".number").find("li").click(function(){
+        			var number=$(this).html();
+        			number=$('input[name="phonenumber"]').val()+number
+        			$('input[name="phonenumber"]').val(number)
+        		})
+        		$(".delimg").click(function(){
+        			var number=$('input[name="phonenumber"]').val();
+        			number=number.substring(0,number.length-1);
+        			$('input[name="phonenumber"]').val(number)
+        		})
+        		
+        		
+        	 $(document).on('input propertychange','.phone',function (e) {
+		        _self = $(this);
+		       
+		        _self.val(_self.val().replace(/[^\d*#]/g,''))//只能输入*#数字
+		
+		    });
+		    $("#huiyi").hover(function(){	
+				$(this).find("img").attr("src","public/images/10@2x.png");
+				$(this).find("p").css("font-size","1.2rem");
+			},function(){
+				$(this).find("img").attr("src","public/images/10-1@2x.png");
+				$(this).find("p").css("font-size","1rem");
+			});
+			
+			
+			$("#tuichu").hover(function(){	
+				$(this).find("img").attr("src","public/images/14-1@2x.png");
+				$(this).find("p").css("font-size","1.2rem");
+			},function(){
+				$(this).find("img").attr("src","public/images/14@2x.png");
+				$(this).find("p").css("font-size","1rem");
+			});
+			
+			
+			
+			$("#shezhi").hover(function(){	
+				$(this).find("img").attr("src","public/images/13-1@2x.png");
+				$(this).find("p").css("font-size","1.2rem");
+			},function(){
+				$(this).find("img").attr("src","public/images/13@2x.png");
+				$(this).find("p").css("font-size","1rem");
+			});
+			
+			
+			
+			$("#lianxiren").hover(function(){	
+				$(this).find("img").attr("src","public/images/11-1@2x.png");
+				$(this).find("p").css("font-size","1.2rem");
+			},function(){
+				$(this).find("img").attr("src","public/images/11@2x.png");
+				$(this).find("p").css("font-size","1rem");
+			});
+			
+			
+			
+			$("#hujiao").hover(function(){	
+				$(this).find("img").attr("src","public/images/12-1@2x.png");
+				$(this).find("p").css("font-size","1.2rem");
+			},function(){
+				$(this).find("img").attr("src","public/images/12@2x.png");
+				$(this).find("p").css("font-size","1rem");
+			});
+			
+			 $(".tablecon").find("tr").click(function(){
+   			 
+   			 	$("#fa").css("display","block")
+        		$("#su").css("display","block")
+   			 })
+			 
+			 $("#close").click(function(){
+        			//prompt层
+        			$("#fa").css("display","none")
+        			$("#su").css("display","none")
+
+        		})
+
+   			 });
+   			 
+   			
+		</script>
+	</body>
+</html>

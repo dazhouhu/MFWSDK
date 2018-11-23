@@ -30,8 +30,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\Lib\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,8 +45,58 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\MFWResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MFWResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="DeviceManager.cs" />
+    <Compile Include="Enums\CallEventState.cs" />
+    <Compile Include="Enums\CallState.cs" />
     <Compile Include="Enums\ErrorNumber.cs" />
     <Compile Include="Helper\IntPtrHelper.cs" />
+    <Compile Include="Model\BaseModel.cs" />
+    <Compile Include="Model\Call.cs" />
+    <Compile Include="Model\Channel.cs" />
+    <Compile Include="Model\Device.cs" />
+    <Compile Include="Model\Event.cs" />
+    <Compile Include="PropertyManager.cs" />
+    <Compile Include="UX\CallView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UX\CallView.Designer.cs">
+      <DependentUpon>CallView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UX\ChannelView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UX\ChannelView.Designer.cs">
+      <DependentUpon>ChannelView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UX\UserControl1.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UX\UserControl1.Designer.cs">
+      <DependentUpon>UserControl1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UX\UXMessageMask.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UX\UXMessageMask.Designer.cs">
+      <DependentUpon>UXMessageMask.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UX\UXMessagePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UX\UXMessagePanel.Designer.cs">
+      <DependentUpon>UXMessagePanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UX\UXMessageWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UX\UXMessageWindow.Designer.cs">
+      <DependentUpon>UXMessageWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="WFWCore.cs" />
     <Compile Include="Enums\AutoDiscoveryStatus.cs" />
     <Compile Include="Enums\CallMode.cs" />
@@ -69,7 +124,84 @@
     <Compile Include="Wrapper\WrapperInterface.cs" />
     <Compile Include="Wrapper\WrapperProxy.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\MFWResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MFWResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\alert.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\answer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\attender.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\call24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\camera.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\camera_mute.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cancel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cancel24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\exit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\hangup.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\hangup24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\info.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mic.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mic_mute.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\more.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mutemic.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ok.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ok24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\question.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\share.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\share_mute.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\speaker.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\speaker_mute.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

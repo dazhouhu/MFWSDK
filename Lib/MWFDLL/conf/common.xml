@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<MFWJavaCommon> 
+  <callSettingsMaxSupportCallNumber>6</callSettingsMaxSupportCallNumber>  
+  <callSettingsSIPClientListeningPort>5060</callSettingsSIPClientListeningPort>  
+  <callSettingsSIPClientListeningTLSPort>5061</callSettingsSIPClientListeningTLSPort>  
+  <callSettingsEnableSVC>true</callSettingsEnableSVC>  
+  <systemConfiglogLevel>DEBUG</systemConfiglogLevel>  
+  <systemUserAgent>MFW_SDK</systemUserAgent>  
+  <QOSServiceType/>  
+  <QOSAudio/>  
+  <QOSVideo/>  
+  <QOSFecc/>  
+  <QOSEnable>false</QOSEnable>  
+  <DBAEnable>false</DBAEnable>  
+  <AutoZoomEnable>false</AutoZoomEnable>  
+  <SIPHeaderCompactEnable>false</SIPHeaderCompactEnable>  
+  <MFWProduct>PLCM_MFW_IBM</MFWProduct>  
+  <LPREnable>true</LPREnable>  
+  <CrertPath>./TLS Certificate/instance0/</CrertPath>  
+  <CheckFQDN>false</CheckFQDN> 
+</MFWJavaCommon>

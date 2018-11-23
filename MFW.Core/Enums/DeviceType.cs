@@ -7,5 +7,6 @@
         ,AUDIOOUTPUT		/**< Indicates speakers. */
         ,VIDEOINPUT 		/**< Indicates cameras. */
         ,MONITOR 			/**< Indicates monitors. */
+        ,APPLICATIONS
     }
 }

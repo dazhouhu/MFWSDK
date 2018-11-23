@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>会议列表</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" type="text/css" href="public/layui/css/layui.css" />
+	<link rel="stylesheet" type="text/css" href="public/font-awesome-4.7.0/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="public/css/commom.css" />
+	<style type="text/css">
+		.body {
+			height: 100%;
+			width: 100%;
+			background: url(public/images/background.jpg);
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+		}
+
+		.meetingList_container {
+			margin: 10% 10%;
+		}
+
+		.layui-carousel>[carousel-item]>*,
+		.layui-carousel {
+			background: none;
+		}
+
+		.meeting_item {
+			width: 25%;
+			float: left;
+		}
+
+		.meeting_item>a {
+			background: #fff;
+			padding: 1rem;
+			border-radius: 1rem;
+			margin: 1rem;
+			display: block;
+		}
+
+		.meeting_item h3 {
+			text-align: center;
+			color: #000;
+		}
+
+		.meeting_item p {
+			color: #555;
+			margin: 0.5rem 0;
+		}
+
+		.meeting_item p label {
+			display: inline-block;
+			width: 5rem;
+			color: #999;
+		}
+
+		.item_status {
+			display: inline-block;
+			padding: 0.2rem 1rem;
+			border-radius: 1rem;
+		}
+
+		.item_wait {
+			background: rgb(113, 88, 182);
+			color: #fff;
+		}
+
+		.item_doing {
+			background: rgb(85, 183, 36);
+			color: #fff;
+		}
+
+		.item_done {
+			background: rgb(179, 179, 179);
+			color: #fff;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div class="body layui-container">
+		<div class="top layui-clear">
+			<div class="logo">
+				Logo
+			</div>
+			<div class="right_top">
+				<div class="search_input">
+					<div class="serach_ico">
+						<img src="public/images/search.png" />
+					</div>
+
+					<input type="text" name="search" lay-verify="required" placeholder="搜索联系人" class="">
+
+				</div>
+
+			</div>
+		</div>
+		<!--top end-->
+		<div class="meetingList_container">
+			<div class="layui-carousel" id="test1">
+				<div carousel-item class="carouselContainer">
+					<!--
+					<div>
+						<div class="meeting_item"><a href="discussMmeeting.html">
+							<h3>研讨会议</h3>
+							<p><label>状态</label><span class="item_status item_doing">进行中</span></p>
+							<p><label>时间</label>07-24 15：30</p>
+							<p><label>ID</label>1234</p>
+							<p><label>创建人</label>张伟</p></a>
+						</div>
+					</div>
+					-->
+				</div>
+			</div>
+
+
+
+		</div>
+		<!--meetingList_container end-->
+	</div>
+	<script src="public/layui/layui.js"></script>
+	<script src="js/utilities.js"></script>
+	<script type="text/javascript">
+		layui.use(['jquery', 'layer', 'carousel'], function () {
+			var $ = layui.$;
+			var form = layui.form;
+			var layer = layui.layer;
+			var carousel = layui.carousel;
+
+			var loadData = function () {
+				$.svc.remoteGet({
+					url: '/api/m/meetings',
+					success: function (result) {
+						if (result.code === 1) {
+							if (result.data) {
+								for (var i = 0; i < 30; i++) {
+									var rel_start='';
+									var rel_end='';
+									if(i%5==0){
+										rel_start='2018-09-10 10:00:10';
+									}
+									if(i%7==0){
+										rel_start='2018-09-10 10:00:10';
+										rel_end='2018-09-10 11:00:10';
+									}
+									result.data.push({
+										"conference_id": "9410d1baa5b211e893a902193b8aadb3",
+										"title": "模拟测试"+i,
+										"owner_name": "马克",
+										"owner_id": "dedf62e2900411e8833b54ee75e53537",
+										"plcm_conference_room_identifier": "1534904704",
+										"proom_pass": "",
+										"start_at": "2018-08-22 10:56:00",
+										"end_at": "2018-08-22 12:56:00",
+										"time_long": 0,
+										"rel_start_at":rel_start,
+										"rel_end_at": rel_end,
+										"rel_time_long": "",
+										"conferenceRoom": [],
+										"conferenceMember": [{
+											"conference_member_id": "9412323aa5b211e8b39a02193b8aadb3",
+											"conference_id": "9410d1baa5b211e893a902193b8aadb3",
+											"user_id": "6c21dea299ef11e8ad42080027d57279",
+											"user_name": "zb"
+										}]
+									});
+								}
+							}
+							var pageSize=12;
+							var pages = result.data.length / pageSize;
+							for (var m = 0; m <= pages; m++) {
+								var meetingHtmls = '';
+								for (var i = m * pageSize; i < (m + 1) * pageSize && i < result.data.length; i++) {
+									var meeting = result.data[i];
+									var status = '未开始';
+									var statusCode = 'item_wait';
+									var time = meeting.start_at;
+									if (meeting.rel_start_at) {
+										status = '进行中';
+										time = meeting.rel_start_at;
+										statusCode = 'item_doing';
+									}
+									if (meeting.rel_end_at) {
+										status = '已结束';
+										statusCode = 'item_done';
+									}
+									meetingHtmls += '<div class="meeting_item"><a href="discussMeeting.html?id="' + meeting.conference_id +'>\
+														<h3>' + meeting.title +'</h3>\
+														<p><label>状态</label><span class="item_status ' + statusCode + '">' + status +'</span></p>\
+														<p><label>时间</label>' + time.substr(5,11) + '</p>\
+														<p><label>ID</label>' +meeting.proom_pass + '</p>\
+														<p><label>创建人</label>' + meeting.owner_name +'</p></a>\
+													</div>';
+								}
+								var pageHtml = '<div>' + meetingHtmls + '</div>';
+								$('.carouselContainer').append(pageHtml);
+								carousel.render({
+									elem: '#test1',
+									width: '100%', //设置容器宽度										
+									height: '550px', //设置容器高度										
+									arrow: 'always', //始终显示箭头										
+									autoplay: false
+									//,anim: 'updown' //切换动画方式
+								});
+							}
+						} else {
+							$.Msg(result.message, 'error');
+						}
+					},
+					error: function (errMsg) {
+						$.Msg(errMsg, 'error');
+					}
+				});
+			};
+			loadData();
+
+
+		});
+	</script>
+</body>
+
+</html>
