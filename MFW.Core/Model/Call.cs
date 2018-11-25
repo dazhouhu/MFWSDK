@@ -191,6 +191,14 @@ namespace MFW.Core
             }
         }
 
+        public Channel GetLocalChannel()
+        {
+            return _channels.FirstOrDefault(c => c.MediaType == MediaType.LOCAL);
+        }
+        public Channel GetContentChannel()
+        {
+            return _channels.FirstOrDefault(c => c.MediaType == MediaType.CONTENT);
+        }
         #endregion
         #region ChannelNumber
         private int _channelNumber;
@@ -255,6 +263,26 @@ namespace MFW.Core
         {
             this.CallHandle = callHandle;
         }
+        #endregion
+
+        #region StartTime
+        public DateTime StartTime { get; set; }
+        #endregion
+
+        #region StopTime
+        public DateTime? StopTime { get; set; }
+        #endregion
+
+        #region ConnectedTime 
+        public DateTime? ConnectedTime { get; set; }
+        #endregion
+
+        #region UnconnectedTime
+        public DateTime? UnconnectedTime { get; set; }
+        #endregion
+
+        #region CallType
+        public CallType CallType { get; set; }
         #endregion
     }
 }

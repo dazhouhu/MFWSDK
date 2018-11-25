@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 	<head>
 	  <meta charset="UTF-8">
@@ -108,21 +108,21 @@
 			 <div class="layui-inline">
 		    <label class="layui-form-label">摄像头</label>
 		    <div class="input-left">
-		      <input type="checkbox"  name="camera" lay-skin="switch" lay-filter="switchTest" title="摄像头">
+		      <input type="checkbox" id="chkCamera"  name="camera" lay-skin="switch" lay-filter="switchTest" title="摄像头">
 		    </div>
 		    </div>
 		    <div class="layui-inline">
 		    <label class="layui-form-label" style="margin-left: -2.5vw;">麦克风</label>
 		    <div class="input-left">
-		      <input type="checkbox" checked=""  name="microphone" lay-skin="switch" lay-filter="switchTest" title="麦克风">
+		      <input type="checkbox" id="chkMic" checked="checked"  name="microphone" lay-skin="switch" lay-filter="switchTest" title="麦克风">
 		    </div>
 		    </div>
 		  </div>
 		  
 		   <div class="layui-form-item login_button">
 		    <div class="">
-		      <button class="layui-btn layui-btn-normal" style="margin-left:0;background: rgb(107,107,107);width: 7vw;" id="cancel">取消</button>
-		      <button class="layui-btn layui-btn-normal " style="margin-left: 3vw;width: 7vw;" id="join">加入</button>
+		      <button class="layui-btn layui-btn-normal" style="margin-left:0;background: rgb(107,107,107);" id="cancel">取消</button>
+		      <button class="layui-btn layui-btn-normal " style="margin-left: 3vw;" id="join">加入</button>
 		    </div>
 		  </div>
 				</form>
@@ -146,6 +146,13 @@
 		<script src="public/layui/layui.js"></script>
 
 		<script type="text/javascript">
+            function enableVideo(isEnable) {
+                if (isEnable) {
+
+                } else {
+
+                }
+            }
 			layui.use(['jquery', 'form','layer'], function () {
 				
 				var $ = layui.$ ;

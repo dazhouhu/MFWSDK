@@ -161,7 +161,7 @@
 		</div>
 	</div>
 	<script src="public/layui/layui.js"></script>
-	<script src="js/utilities.js?token=20181123"></script>
+	<script src="public/js/utilities.js"></script>
 	<script type="text/javascript">
 		layui.use(['jquery', 'form'], function () {
 			var $ = layui.$;
@@ -193,7 +193,7 @@
 				$.getToken(userid, password, function (data) {
 					location.href = "meeting.html"
 				}, function (errMsg) {
-					$.Msg(errMsg,'error');
+                    $.Msg(errMsg,'错误消息', 'error');
 				})
 			})
 		});

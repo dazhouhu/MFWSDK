@@ -13,16 +13,23 @@ namespace MFW.Core
         private static ILog log = LogManager.GetLogger("MFWCore");
         private static DeviceManager deviceManager = DeviceManager.GetInstance();
         private static PropertyManager propertyManager = PropertyManager.GetInstance();
-        
+        private static CallView callView = CallView.GetInstance();
         #endregion
 
         #region Constructors
+        private static readonly object lockObj = new object();
         private static MFWCore instance = null;
         public static MFWCore GetInstance()
         {
             if (instance == null)
             {
-                instance = new MFWCore();
+                lock (lockObj)
+                {
+                    if (instance == null)
+                    {
+                        instance = new MFWCore();
+                    }
+                }
             }
             return instance;
         }
@@ -322,8 +329,11 @@ namespace MFW.Core
                         }
                         try
                         {
-                            mainThreadSynContext.Post(new SendOrPostCallback(DoEvent), evt);
-
+                            callView.Invoke(new Action(() =>
+                            {
+                                DoEvent(evt);
+                            }));
+                            //mainThreadSynContext.Post(new SendOrPostCallback(DoEvent), evt);
                         }
                         catch (Exception ex)
                         {
@@ -695,6 +705,7 @@ namespace MFW.Core
                 log.Error(errMsg);
                 throw new Exception(errMsg);
             }
+            callView.BindPanel(owner);
             errno =WrapperProxy.RegisterClient();
             if(errno != ErrorNumber.OK)
             {
@@ -702,7 +713,6 @@ namespace MFW.Core
                 log.Error(errMsg);
                 throw new Exception(errMsg);
             }
-            new CallView(owner);
         }
         public static void Unregister()
         {
@@ -722,6 +732,88 @@ namespace MFW.Core
                 var errMsg = "Dial a Call failed. ErrorNum = " + errno;
                 log.Error(errMsg);
                 throw new Exception(errMsg);
+            }
+        }
+        #endregion
+
+        #region 设置属性
+        public static void SetProperty(PropertyKey propertyKey,string value)
+        {
+            propertyManager.SetProperty(propertyKey, value);
+        }
+        public static string GetProperty(PropertyKey propertyKey)
+        {
+            return propertyManager.GetProperty(propertyKey);
+        }
+        #endregion
+
+        #region Device Setting
+        public static ErrorNumber MuteMic(Call call, bool isMute)
+        {
+            return WrapperProxy.MuteMic(call.CallHandle, isMute);
+        }
+
+        public static ErrorNumber MuteSpeaker(bool isMute)
+        {
+            return WrapperProxy.MuteSpeaker(isMute);
+        }
+
+        public static ErrorNumber SetMicVolume(int volume)
+        {
+            return WrapperProxy.SetMicVolume(volume);
+        }
+
+        public static int GetMicVolume()
+        {
+            return WrapperProxy.GetMicVolume();
+        }
+
+        public static ErrorNumber SetSpeakerVolume(int volume)
+        {
+            return WrapperProxy.SetSpeakerVolume(volume);
+        }
+
+        public static int GetSpeakerVolume()
+        {
+            return WrapperProxy.GetSpeakerVolume();
+        }
+        public static ErrorNumber StartCamera()
+        {
+            return WrapperProxy.StartCamera();
+        }
+
+        public static ErrorNumber StopCamera()
+        {
+            return WrapperProxy.StopCamera();
+        }
+
+        public static ErrorNumber StartShareContent(Call call, string deviceHandle, IntPtr appWndHandle)
+        {
+            return WrapperProxy.StartShareContent(call.CallHandle, deviceHandle, appWndHandle);
+        }
+        public static ErrorNumber StartBFCPContent(Call call)
+        {
+            return WrapperProxy.StartBFCPContent(call.CallHandle);
+        }
+
+        public static ErrorNumber StopShareContent(Call call)
+        {
+            return WrapperProxy.StopShareContent(call.CallHandle);
+        }
+
+        public static ErrorNumber SetContentBuffer(ImageFormat format, int width, int height)
+        {
+            return WrapperProxy.SetContentBuffer(format, width, height);
+        }
+        #endregion
+
+        #region ViewLayout
+        public static void SetLayout(LayoutType layout)
+        {
+            propertyManager.SetProperty(PropertyKey.LayoutType, layout.ToString());
+            if (null != callView)
+            {
+                callView.ViewRender();
             }
         }
         #endregion

@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MFW.Core</RootNamespace>
     <AssemblyName>MFW.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,9 +51,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MFWResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="CallManager.cs" />
     <Compile Include="DeviceManager.cs" />
     <Compile Include="Enums\CallEventState.cs" />
     <Compile Include="Enums\CallState.cs" />
+    <Compile Include="Enums\CallType.cs" />
     <Compile Include="Enums\ErrorNumber.cs" />
     <Compile Include="Helper\IntPtrHelper.cs" />
     <Compile Include="Model\BaseModel.cs" />
@@ -128,6 +131,12 @@
     <EmbeddedResource Include="Assets\MFWResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>MFWResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UX\CallView.resx">
+      <DependentUpon>CallView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UX\ChannelView.resx">
+      <DependentUpon>ChannelView.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -34,7 +34,6 @@ namespace MFW.Core
             set
             {
                 lblName.Visible = !value;
-                pnlBtns.Visible = value;
                 lblChannelName.Visible = value;
                 btnAudio.Visible = value;
                 btnVideo.Visible = value;
@@ -66,6 +65,14 @@ namespace MFW.Core
                     break;
                 case "IsActive":
                     {
+                        if (_channel.IsActive)
+                        {
+                            this.BorderStyle = BorderStyle.Fixed3D;
+                        }
+                        else
+                        {
+                            this.BorderStyle = BorderStyle.None;
+                        }
                     }
                     break;
                 case "Size":
@@ -102,6 +109,7 @@ namespace MFW.Core
                             {
                                 log.Error("本地视频卸载失败");
                             }
+                            WrapperProxy.StopCamera();
                         }
                         break;
                     case MediaType.REMOTE:
@@ -194,6 +202,7 @@ namespace MFW.Core
                                 {
                                     log.Error("本地视频附加失败");
                                 }
+                                WrapperProxy.StartCamera();
                             }
                             break;
                         case MediaType.REMOTE:
@@ -228,6 +237,7 @@ namespace MFW.Core
                                 {
                                     log.Error("本地视频卸载失败");
                                 }
+                                WrapperProxy.StopCamera();
                             }
                             break;
                         case MediaType.REMOTE:

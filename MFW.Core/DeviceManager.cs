@@ -19,6 +19,7 @@ namespace MFW.Core
         #endregion
 
         #region Constructors
+        private static readonly object lockObj = new object();
         private static DeviceManager _instance = null;
         private DeviceManager() { }
 
@@ -26,7 +27,13 @@ namespace MFW.Core
         {
             if(null == _instance)
             {
-                _instance = new DeviceManager();
+                lock (lockObj)
+                {
+                    if (_instance == null)
+                    {
+                        _instance = new DeviceManager();
+                    }
+                }
             }
             return _instance;
         }

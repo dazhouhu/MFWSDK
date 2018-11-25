@@ -16,591 +16,58 @@ namespace MFW.Core
     {
         #region Field
         private ILog log = LogManager.GetLogger("MFW.CallView");
-        private static DeviceManager deviceManager = DeviceManager.GetInstance();
-        private static PropertyManager propertyManager = PropertyManager.GetInstance();
-        private Call _currentCall=null;
+        private PropertyManager propertyManager =null;
+        private CallManager callManager = null;
+        private Call _currentCall = null;
         private Dictionary<Channel, ChannelView> channelViews = new Dictionary<Channel, ChannelView>();
         private Panel ownerPnl;
         private Channel localChannel;
         private Channel contentChannel;
         #endregion
         #region Constructors
-        public CallView(Panel owner)
+        private static readonly object lockObj = new object();
+        private static CallView instance = null;
+        private CallView()
         {
             InitializeComponent();
-            owner.Controls.Add(this);
-            ownerPnl = owner;
-
-            this.Dock = DockStyle.Fill;
-            this.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
-            MFWCore.InternalMFWEvent += MFWEventHandle;
+        }
+        public static CallView GetInstance()
+        {
+            if (instance == null)
+            {
+                lock (lockObj)
+                {
+                    if (instance == null)
+                    {
+                        instance = new CallView();
+                    }
+                }
+            }
+            return instance;
         }
         #endregion
 
         #region Properties
         #endregion
 
-        #region MFWEvent
-        private void MFWEventHandle(Event evt)
-        {
-            switch (evt.EventType)
-            {
-                #region Register
-                case EventType.UNKNOWN: break;
-                case EventType.SIP_REGISTER_SUCCESS: break;
-                case EventType.SIP_REGISTER_FAILURE:
-                    {
-                        UXMessageMask.ShowMessage(ownerPnl, false, "注册失败", MessageBoxButtonsType.None, MessageBoxIcon.Error);
-                    }
-                    break;
-                case EventType.SIP_REGISTER_UNREGISTERED:
-                    {
-                        UXMessageMask.ShowMessage(ownerPnl, false, "未注册", MessageBoxButtonsType.None, MessageBoxIcon.Error);
-                    }
-                    break;
-                #endregion
-                #region Call
-                case EventType.SIP_CALL_INCOMING:
-                    {
-                        var msg = string.Format("【{0}】呼入中，是否接听？", evt.CallerName);
-
-                        var callStateText = GetCallStateText(_currentCall, true);
-                        if (!string.IsNullOrEmpty(callStateText))
-                        {
-                            msg += '\n' + callStateText;
-                            msg += '\n' + "接听将挂断当前通话。";
-                        }
-                        Action answerAction = () =>
-                        {
-                            log.Info(string.Format("接听呼叫{0}", evt.CallerName));
-                            if (!string.IsNullOrEmpty(callStateText))
-                            {
-                                log.Info(string.Format("挂断呼叫{0}", _currentCall.CallName));
-                                WrapperProxy.TerminateCall(_currentCall.CallHandle);
-                            }
-                            var call = new Call(evt.CallHandle)
-                            {
-                                CallName = evt.CallerName,
-                                CallMode = evt.CallMode,
-                                CallState = CallState.SIP_INCOMING_INVITE
-                            };
-                            evt.Call = call;
-                            localChannel = new Channel(evt.Call, 0, MediaType.LOCAL, false);
-                            evt.Call.AddChannel(localChannel);
-                            SetCurrentCall(call);
-                        };
-                        Action hangupAction = () =>
-                        {
-                            log.Info(string.Format("不接听呼叫{0}", evt.CallerName));
-                            WrapperProxy.TerminateCall(evt.CallHandle);
-                        };
-                        UXMessageMask.ShowMessage(ownerPnl, true, msg, MessageBoxButtonsType.AnswerHangup, MessageBoxIcon.Question
-                                                    , answerAction, hangupAction);
-
-                    }
-                    break;
-                case EventType.SIP_CALL_TRYING:
-                    {
-                        var callStateText = GetCallStateText(_currentCall, true);
-                        if (!string.IsNullOrEmpty(callStateText))
-                        {
-                            log.Info(string.Format("挂断呼叫{0}", _currentCall.CallName));
-                            WrapperProxy.TerminateCall(_currentCall.CallHandle);
-                        }
-                        var call = new Call(evt.CallHandle)
-                        {
-                            CallName = evt.CallerName,
-                            CallMode = evt.CallMode,
-                            CallState = CallState.SIP_INCOMING_INVITE
-                        };
-                        evt.Call = call;
-                        localChannel = new Channel(evt.Call, 0, MediaType.LOCAL, false);
-                        evt.Call.AddChannel(localChannel);
-                        SetCurrentCall(call);
-                        var msg = string.Format("尝试呼出【{0}】中...", evt.CallerName);
-
-                        Action hangupAction = () =>
-                        {
-                            log.Info(string.Format("挂断呼叫{0}", evt.CallerName));
-                            WrapperProxy.TerminateCall(evt.CallHandle);
-                        };
-                        UXMessageMask.ShowMessage(ownerPnl, false, msg, MessageBoxButtonsType.Hangup, MessageBoxIcon.Question
-                                                    , hangupAction);
-
-                    }
-                    break;
-                case EventType.SIP_CALL_RINGING:
-                    {
-                        if (null == _currentCall || evt.CallHandle != _currentCall.CallHandle)
-                        {
-                            return;
-                        }
-                        evt.Call = _currentCall;
-                        evt.Call.CallState = CallState.SIP_OUTGOING_RINGING;
-                        var msg = string.Format("呼出【{0}】响铃中...", evt.Call.CallName);
-
-                        Action hangupAction = () =>
-                        {
-                            log.Info(string.Format("挂断呼叫{0}", evt.CallerName));
-                            WrapperProxy.TerminateCall(evt.CallHandle);
-                        };
-                        UXMessageMask.ShowMessage(ownerPnl, false, msg, MessageBoxButtonsType.Hangup, MessageBoxIcon.Information
-                                                    , hangupAction);
-                    }
-                    break;
-                case EventType.SIP_CALL_FAILURE:
-                    {
-                        if (null == _currentCall || evt.CallHandle != _currentCall.CallHandle)
-                        {
-                            return;
-                        }
-                        evt.Call = _currentCall;
-                        evt.Call.CallState = CallState.SIP_OUTGOING_FAILURE;
-                        evt.Call.Reason = string.IsNullOrEmpty(evt.Reason) ? "unknown reason" : evt.Reason;
-                        var msg = string.Format("呼出【{0}】失败,原因:{1}", evt.Call.CallName, evt.Call.Reason);
-                        log.Info(msg);
-                        UXMessageMask.ShowMessage(ownerPnl, false, msg, MessageBoxButtonsType.None, MessageBoxIcon.Error);
-                        evt.Call.CallState = CallState.SIP_OUTGOING_FAILURE;
-                    }
-                    break;
-                case EventType.SIP_CALL_CLOSED:
-                    {
-                        if (null == _currentCall || evt.CallHandle != _currentCall.CallHandle)
-                        {
-                            return;
-                        }
-                        evt.Call = _currentCall;
-                        evt.Call.Reason = string.IsNullOrEmpty(evt.Reason) ? "unknown reason" : evt.Reason;
-                        var msg = string.Format("呼出【{0}】关闭,原因:{1}", evt.Call.CallName, evt.Call.Reason);
-                        log.Info(msg);
-                        UXMessageMask.ShowMessage(ownerPnl, false, msg, MessageBoxButtonsType.None, MessageBoxIcon.Information);
-                        evt.Call.CallState = CallState.SIP_CALL_CLOSED;
-                    }
-                    break;
-                case EventType.SIP_CALL_HOLD:
-                    {
-                        if (null == _currentCall || evt.CallHandle != _currentCall.CallHandle)
-                        {
-                            return;
-                        }
-                        evt.Call = _currentCall;
-                        var msg = string.Format("呼叫【{0}】中断保持，是否需要恢复通话？", evt.Call.CallName);
-                        var yesAction = new Action(() =>
-                        {
-                            log.Info(string.Format("呼叫【{0}】中断恢复", evt.Call.CallName));
-                            var errno = WrapperProxy.ResumeCall(evt.Call.CallHandle);
-                            if (errno != ErrorNumber.OK)
-                            {
-                                UXMessageMask.ShowMessage(ownerPnl, false, "恢复通话失败！", MessageBoxButtonsType.OK, MessageBoxIcon.Error);
-                            }
-                        });
-                        Action noAction = () =>
-                        {
-                            log.Info(string.Format("挂断呼叫{0}", evt.CallerName));
-                            WrapperProxy.TerminateCall(evt.CallHandle);
-                        };
-                        UXMessageMask.ShowMessage(ownerPnl, false, msg, MessageBoxButtonsType.YesNoCancel, MessageBoxIcon.Question
-                            , yesAction, noAction);
-                        evt.Call.CallState = CallState.SIP_CALL_HOLD;
-                    }
-                    break;
-                case EventType.SIP_CALL_HELD:
-                    {
-                        if (null == _currentCall || evt.CallHandle != _currentCall.CallHandle)
-                        {
-                            return;
-                        }
-                        evt.Call = _currentCall;
-                        var msg = string.Format("呼叫【{0}】被保持", evt.Call.CallName);
-                        Action hangupAction = () =>
-                        {
-                            log.Info(string.Format("挂断呼叫{0}", evt.CallerName));
-                            WrapperProxy.TerminateCall(evt.CallHandle);
-                        };
-                        UXMessageMask.ShowMessage(ownerPnl, false, msg, MessageBoxButtonsType.Hangup, MessageBoxIcon.Information, hangupAction);
-                        evt.Call.CallState = CallState.SIP_CALL_HELD;
-                    }
-                    break;
-                case EventType.SIP_CALL_DOUBLE_HOLD:
-                    {
-                        if (null == _currentCall || evt.CallHandle != _currentCall.CallHandle)
-                        {
-                            return;
-                        }
-                        evt.Call = _currentCall;
-                        var msg = string.Format("呼叫【{0}】双方中断保持，是否需要恢复通话？", evt.Call.CallName);
-                        var yesAction = new Action(() =>
-                        {
-                            log.Info(string.Format("呼叫【{0}】中断恢复", evt.Call.CallName));
-                            var errno = WrapperProxy.ResumeCall(evt.Call.CallHandle);
-                            if (errno != ErrorNumber.OK)
-                            {
-                                UXMessageMask.ShowMessage(ownerPnl, false, "恢复通话失败！", MessageBoxButtonsType.OK, MessageBoxIcon.Error);
-                            }
-                        });
-                        Action noAction = () =>
-                        {
-                            log.Info(string.Format("挂断呼叫{0}", evt.CallerName));
-                            WrapperProxy.TerminateCall(evt.CallHandle);
-                        };
-                        UXMessageMask.ShowMessage(ownerPnl, false, msg, MessageBoxButtonsType.YesNoCancel, MessageBoxIcon.Question
-                            , yesAction, noAction);
-                        evt.Call.CallState = CallState.SIP_CALL_DOUBLE_HOLD;
-                    }
-                    break;
-                case EventType.SIP_CALL_UAS_CONNECTED:
-                    {
-                        if (null == _currentCall || evt.CallHandle != _currentCall.CallHandle)
-                        {
-                            return;
-                        }
-                        evt.Call = _currentCall;
-                        log.Info(string.Format("呼入{0}接听通话中", evt.Call.CallName));
-                        evt.Call.CallState = CallState.SIP_INCOMING_CONNECTED;
-                        UXMessageMask.HideMessage(ownerPnl);
-                    }
-                    break;
-                case EventType.SIP_CALL_UAC_CONNECTED:
-                    {
-                        if (null == _currentCall || evt.CallHandle != _currentCall.CallHandle)
-                        {
-                            return;
-                        }
-                        evt.Call = _currentCall;
-                        log.Info(string.Format("呼出{0}接听通话中", evt.Call.CallName));
-                        evt.Call.CallState = CallState.SIP_OUTGOING_CONNECTED;
-                        UXMessageMask.HideMessage(ownerPnl);
-                    }
-                    break;
-                #endregion
-                #region Content
-                case EventType.SIP_CONTENT_INCOMING:
-                    {
-                        if (null == _currentCall || evt.CallHandle != _currentCall.CallHandle)
-                        {
-                            return;
-                        }
-                        evt.Call = _currentCall;
-                        if (null != contentChannel)
-                        {
-                            evt.Call.RemoveChannel(contentChannel.ChannelID);
-                        }
-                        contentChannel = new Channel(evt.Call, evt.StreamId, MediaType.CONTENT);
-                        evt.Call.AddChannel(contentChannel);
-                        contentChannel.Size = new Size(evt.WndWidth, evt.WndHeight);
-                    }
-                    break;
-                case EventType.SIP_CONTENT_CLOSED:
-                    {
-                        if (null == _currentCall || evt.CallHandle != _currentCall.CallHandle)
-                        {
-                            return;
-                        }
-                        evt.Call = _currentCall;
-                        if (null != contentChannel)
-                        {
-                            evt.Call.RemoveChannel(contentChannel.ChannelID);
-                            contentChannel = null;
-                        }
-                    }
-                    break;
-                case EventType.SIP_CONTENT_SENDING:
-                    {
-                        if (null == _currentCall || evt.CallHandle != _currentCall.CallHandle)
-                        {
-                            return;
-                        }
-                        evt.Call = _currentCall;
-                    }
-                    break;
-                case EventType.SIP_CONTENT_IDLE:
-                    {
-                        if (null == _currentCall || evt.CallHandle != _currentCall.CallHandle)
-                        {
-                            return;
-                        }
-                        evt.Call = _currentCall;
-                        evt.Call.IsContentSupported = true;
-                    }
-                    break;
-                case EventType.SIP_CONTENT_UNSUPPORTED:
-                    {
-                        if (null == _currentCall || evt.CallHandle != _currentCall.CallHandle)
-                        {
-                            return;
-                        }
-                        evt.Call = _currentCall;
-                        evt.Call.IsContentSupported = false;
-                    }
-                    break;
-                #endregion
-
-                #region Device
-                /*
-                case EventType.DEVICE_VIDEOINPUTCHANGED:
-                {
-                    string deviceName = evt.PlugDeviceName;
-                    string deviceHandle = evt.DeviceHandle;
-                    if (string.IsNullOrWhiteSpace(deviceName)
-                        || string.IsNullOrWhiteSpace(deviceHandle))
-                    {
-                        return;
-                    }
-                    if (true == evt.PlugDeviceStatus)
-                    { 
-                        var device = new Device(DeviceType.VIDEOINPUT, deviceHandle, deviceName);
-                        deviceManager.AddDevice(device);
-                    }
-                    else
-                    {
-                        deviceManager.RemoveDevice(deviceHandle);
-                    }
-                }
-                break;  
-                case EventType.DEVICE_AUDIOINPUTCHANGED:
-                {
-                    string deviceName = evt.PlugDeviceName;
-                    string deviceHandle = evt.DeviceHandle;
-                    if (string.IsNullOrWhiteSpace(deviceName)
-                        || string.IsNullOrWhiteSpace(deviceHandle))
-                    {
-                        return;
-                    }
-                    if (true == evt.PlugDeviceStatus)
-                    {  
-                        var device = new Device(DeviceType.AUDIOINPUT, deviceHandle, deviceName);
-                        deviceManager.AddDevice(device);
-                    }
-                    else
-                    {
-                        deviceManager.RemoveDevice(deviceHandle);
-                    }
-                }
-                break; 
-                case EventType.DEVICE_AUDIOOUTPUTCHANGED:
-                {
-                    string deviceName = evt.PlugDeviceName;
-                    string deviceHandle = evt.DeviceHandle;
-                    if (string.IsNullOrWhiteSpace(deviceName)
-                        || string.IsNullOrWhiteSpace(deviceHandle))
-                    {
-                        return;
-                    }
-                    if (true == evt.PlugDeviceStatus)
-                    {  
-                        var device = new Device(DeviceType.AUDIOOUTPUT, deviceHandle, deviceName);
-                        deviceManager.AddDevice(device);
-                    }
-                    else
-                    {
-                        deviceManager.RemoveDevice(deviceHandle);
-                    }
-                }
-                break; 
-                case EventType.DEVICE_VOLUMECHANGED: break;  
-                case EventType.DEVICE_MONITORINPUTSCHANGED:
-                {
-                    string deviceName = evt.PlugDeviceName;
-                    string deviceHandle = evt.DeviceHandle;
-                    if (string.IsNullOrWhiteSpace(deviceName)
-                        || string.IsNullOrWhiteSpace(deviceHandle))
-                    {
-                        return;
-                    }
-                    if (true == evt.PlugDeviceStatus)
-                    {  
-                        var device = new Device(DeviceType.MONITOR, deviceHandle, deviceName);
-                        deviceManager.AddDevice(device);
-                    }
-                    else
-                    {
-                        deviceManager.RemoveDevice(deviceHandle);
-                    }
-                }
-                break;  
-                */
-                #endregion
-
-                #region Stream
-                case EventType.STREAM_VIDEO_LOCAL_RESOLUTIONCHANGED:
-                    {
-                        if (null == _currentCall || evt.CallHandle != _currentCall.CallHandle)
-                        {
-                            return;
-                        }
-                        evt.Call = _currentCall;
-                        localChannel.Size = new Size(evt.WndWidth, evt.WndHeight);
-                    }
-                    break;
-                case EventType.STREAM_VIDEO_REMOTE_RESOLUTIONCHANGED:
-                    {
-                        if (null == _currentCall || evt.CallHandle != _currentCall.CallHandle)
-                        {
-                            return;
-                        }
-                        evt.Call = _currentCall;
-                        var channel = evt.Call.GetChannel(evt.StreamId);
-                        if (null != channel)
-                        {
-                            channel.Size = new Size(evt.WndWidth, evt.WndHeight);
-                        }
-                    }
-                    break;
-                #endregion
-
-                case EventType.NETWORK_CHANGED: break;
-                case EventType.MFW_INTERNAL_TIME_OUT: break;
-
-
-                case EventType.REFRESH_ACTIVE_SPEAKER:
-                    {
-                        if (null == _currentCall || evt.CallHandle != _currentCall.CallHandle)
-                        {
-                            return;
-                        }
-                        evt.Call = _currentCall;
-                        evt.Call.ActiveSpeakerId = evt.ActiveSpeakerStreamId;
-                    }
-                    break;
-                case EventType.REMOTE_VIDEO_REFRESH:
-                    {
-                        if (null == _currentCall || evt.CallHandle != _currentCall.CallHandle)
-                        {
-                            return;
-                        }
-                        evt.Call = _currentCall;
-                        evt.Call.CallName = evt.CallerName;
-                        evt.Call.ClearRemoteChannels();
-                        evt.Call.ChannelNumber = evt.RemoteVideoChannelNum;
-                        evt.Call.ActiveSpeakerId = evt.ActiveSpeakerStreamId;
-
-                    }
-                    break;
-                case EventType.REMOTE_VIDEO_CHANNELSTATUS_CHANGED:
-                    {
-                        if (null == _currentCall || evt.CallHandle != _currentCall.CallHandle)
-                        {
-                            return;
-                        }
-                        evt.Call = _currentCall;
-                        evt.Call.AddChannel(evt.StreamId, MediaType.REMOTE);
-                        if (evt.IsActiveSpeaker)
-                        {
-                            evt.Call.ActiveSpeakerId = evt.StreamId;
-                        }
-                    }
-                    break;
-                case EventType.REMOTE_VIDEO_DISPLAYNAME_UPDATE:
-                    {
-                        if (null == _currentCall || evt.CallHandle != _currentCall.CallHandle)
-                        {
-                            return;
-                        }
-                        evt.Call = _currentCall;
-                        evt.Call.SetChannelName(evt.StreamId, evt.RemoteChannelDisplayName);
-                    }
-                    break;
-                case EventType.SIP_CALL_MODE_CHANGED:
-                    {
-                        if (null == _currentCall || evt.CallHandle != _currentCall.CallHandle)
-                        {
-                            return;
-                        }
-                        evt.Call = _currentCall;
-                        evt.Call.CallMode = evt.CallMode;
-                        if (evt.CallMode == CallMode.AUDIOVIDEO_CALL)
-                        {
-                            evt.Call.IsAudioOnly = false;
-                        }
-                        else
-                        {
-                            evt.Call.IsAudioOnly = true;
-                            evt.Call.IsContentSupported = false;
-                        }
-                    }
-                    break;
-
-                case EventType.SIP_CALL_MODE_UPGRADE_REQ: break;
-                case EventType.IS_TALKING_STATUS_CHANGED: break;
-                case EventType.CERTIFICATE_VERIFY: break;
-                case EventType.TRANSCODER_FINISH: break;
-                case EventType.ICE_STATUS_CHANGED: break;
-                case EventType.SUTLITE_INCOMING_CALL: break;
-                case EventType.SUTLITE_TERMINATE_CALL: break;
-                case EventType.NOT_SUPPORT_VIDEOCODEC: break;
-
-                case EventType.BANDWIDTH_LIMITATION: break;
-                case EventType.MEDIA_ADDRESS_UPDATED: break;
-                case EventType.AUTODISCOVERY_STATUS_CHANGED: break;
-            }
-        }
-        #endregion
-
-        private string GetCallStateText(Call call,bool isActive=false)
-        {
-            var msg = string.Empty;
-            if (null != call)
-            {
-                switch (_currentCall.CallState)
-                {
-                    case CallState.SIP_UNKNOWN:
-                    case CallState.NULL_CALL:
-                        break;
-                    case CallState.SIP_OUTGOING_FAILURE:
-                        {
-                            if (!isActive)
-                            {
-                                msg = string.Format("【{0}】呼出失败", _currentCall.CallName);
-                            }
-                        }
-                        break;
-                    case CallState.SIP_CALL_CLOSED:
-                        {
-                            if (!isActive)
-                            {
-                                msg = string.Format("【{0}】呼出关闭", _currentCall.CallName);
-                            }
-                        }
-                        break;
-                    case CallState.SIP_INCOMING_INVITE:
-                        msg = string.Format("【{0}】正在呼入响铃中", _currentCall.CallName);
-                        break;
-                    case CallState.SIP_INCOMING_CONNECTED:
-                        msg = string.Format("【{0}】正在呼入通话中", _currentCall.CallName);
-                        break;
-                    case CallState.SIP_CALL_HOLD:
-                        msg = string.Format("【{0}】正在主动保持连接中", _currentCall.CallName);
-                        break;
-                    case CallState.SIP_CALL_HELD:
-                        msg = string.Format("【{0}】正在被动保持连接中", _currentCall.CallName);
-                        break;
-                    case CallState.SIP_CALL_DOUBLE_HOLD:
-                        msg = string.Format("【{0}】正在双方保持连接中", _currentCall.CallName);
-                        break;
-                    case CallState.SIP_OUTGOING_TRYING:
-                        msg = string.Format("【{0}】正在尝试呼出中", _currentCall.CallName);
-                        break;
-                    case CallState.SIP_OUTGOING_RINGING:
-                        msg = string.Format("【{0}】正在呼出响铃中", _currentCall.CallName);
-                        break;
-                    case CallState.SIP_OUTGOING_CONNECTED:
-                        msg = string.Format("【{0}】正在呼出通话中", _currentCall.CallName);
-                        break;
-                }
-            }
-            return msg;
-        }
+        
 
         #region SetCall
         private void SetCurrentCall(Call call)
         {
             if(null != _currentCall)
             {
-
+                _currentCall.PropertyChanged -= OnCallPropertyChangedHandle;
+                _currentCall.Channels.CollectionChanged -= OnChannelsCllectionChangedHandle;
             }
             this.Controls.Clear();
+            foreach(var channelView in channelViews)
+            {
+              //  channelView.Value.Dispose();
+            }
+            channelViews.Clear();
             _currentCall = call;
-            if(null != _currentCall)
+            if (null != _currentCall)
             {
                 _currentCall.PropertyChanged += OnCallPropertyChangedHandle;
                 _currentCall.Channels.CollectionChanged += OnChannelsCllectionChangedHandle;
@@ -681,8 +148,49 @@ namespace MFW.Core
 
         #endregion
 
+        #region BindPanel
+        public void BindPanel(Panel pnl)
+        {
+            if(null ==pnl)
+            {
+                throw new Exception("父控件必须");
+            }
+            pnl.Controls.Add(this);
+            ownerPnl = pnl;
+
+            this.Dock = DockStyle.Fill;
+            //this.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
+            this.Width = ownerPnl.Width;
+            this.Height = ownerPnl.Height-80;
+            ownerPnl.SizeChanged += (sender, args) =>
+            {
+                this.Width = ownerPnl.Width;
+                this.Height = ownerPnl.Height-80;
+                ViewRender();
+            };
+        }
+        #endregion
+
+        #region Messages
+        public void ShowMessage(bool isModal, string msg, MessageBoxButtonsType btnType, MessageBoxIcon boxIcon
+            , Action okAction = null, Action cancelAction = null, Action noAction = null)
+        {
+            if(null != ownerPnl)
+            {
+               // UXMessageMask.ShowMessage(ownerPnl, isModal, msg, btnType, boxIcon, okAction, cancelAction, noAction);
+            }
+        }
+        public void HideMessage()
+        {
+            if (null == ownerPnl)
+            {
+                UXMessageMask.HideMessage(ownerPnl);
+            }
+        }
+        #endregion
+
         #region View Render
-        private void ViewRender()
+        public void ViewRender()
         {
             if (null == _currentCall || channelViews.Count <= 0)
             {
@@ -691,7 +199,7 @@ namespace MFW.Core
             var layoutType = propertyManager.GetProperty(PropertyKey.LayoutType);
 
             var viewWidth = this.Width;
-            var viewHeight = this.Height;
+            var viewHeight = this.Height-80;
             var ratioWidth = 320;
             var ratioHeight = 240;
             var cellWidth = ratioWidth;
@@ -705,6 +213,10 @@ namespace MFW.Core
             if(null== activeChannel)
             {
                 activeChannel = contentChannel;
+            }
+            if(null != _currentCall.CurrentChannel)
+            {
+                activeChannel = _currentCall.CurrentChannel;
             }
             if(null == activeChannel)
             {
@@ -726,6 +238,7 @@ namespace MFW.Core
                         {
                             activeView.Location = new Point(0, 0);
                             activeView.Size = new Size(viewWidth,viewHeight);
+                            activeView.IsShowBar = false;
                             activeView.SendToBack();
                         }
 
@@ -794,8 +307,9 @@ namespace MFW.Core
                         {
                             view.Location = new Point(x, y);
                             view.Size = new Size(cWidth, cHeight);
+                            view.IsShowBar = true;
                             view.BringToFront();
-                            x = x + cellWidth;
+                            x = x + cWidth;
                             i++;
                             if (i % 4 == 0)
                             {
@@ -816,6 +330,7 @@ namespace MFW.Core
                         {
                             activeView.Location = new Point(0, 0);
                             activeView.Size = new Size(locate.X, locate.Y);
+                            activeView.IsShowBar = false;
                             activeView.BringToFront();
                         }
                         #endregion
@@ -839,6 +354,7 @@ namespace MFW.Core
                         i++;
                         view.Location = new Point(x-cellWidth,y-i*cellHeight);
                         view.Size = new Size(cellWidth, cellHeight);
+                        view.IsShowBar = true;
                         view.BringToFront();
                     }
                     return new Point(x-cellWidth,y);
@@ -851,6 +367,7 @@ namespace MFW.Core
                         i++;
                         view.Location = new Point(x - i*cellWidth, y - cellHeight);
                         view.Size = new Size(cellWidth, cellHeight);
+                        view.IsShowBar = true;
                         view.BringToFront();
                     }
                     return new Point(x, y-cellHeight);
@@ -875,6 +392,7 @@ namespace MFW.Core
                         }
                         view.Location = new Point(x - colIndex * cellWidth, y - rowindex*cellHeight);
                         view.Size = new Size(cellWidth, cellHeight);
+                        view.IsShowBar = true;
                         view.BringToFront();
                     }
                     return new Point(x-cellWidth, y - cellHeight);
@@ -894,6 +412,7 @@ namespace MFW.Core
                         i++;
                         view.Location = new Point(x - i * cellWidth, y - cellHeight);
                         view.Size = new Size(cellWidth, cellHeight);
+                        view.IsShowBar = true;
                         view.BringToFront();
                     }
                     return new Point(x, y - cellHeight);
@@ -906,6 +425,7 @@ namespace MFW.Core
                         i++;
                         view.Location = new Point(x - cellWidth, y - i * cellHeight);
                         view.Size = new Size(cellWidth, cellHeight);
+                        view.IsShowBar = true;
                         view.BringToFront();
                     }
                     return new Point(x - cellWidth, y);
@@ -941,5 +461,22 @@ namespace MFW.Core
             }
         }
         #endregion
+
+        private void CallView_Load(object sender, EventArgs e)
+        {
+            propertyManager = PropertyManager.GetInstance();
+            callManager = CallManager.GetInstance();
+            callManager.PropertyChanged += (obj, args) =>
+                {
+                    switch (args.PropertyName)
+                    {
+                        case "CurrentCall":
+                            {
+                                SetCurrentCall(callManager.CurrentCall);
+                            }
+                            break;
+                    }
+                };
+        }
     }
 }

@@ -15,6 +15,7 @@ namespace MFW.Core
         #endregion
 
         #region Constructors
+        private static readonly object lockObj = new object();
         private static PropertyManager _instance = null;
         private PropertyManager()
         {
@@ -24,7 +25,13 @@ namespace MFW.Core
         {
             if(null == _instance)
             {
-                _instance = new PropertyManager();
+                lock (lockObj)
+                {
+                    if (_instance == null)
+                    {
+                        _instance = new PropertyManager();
+                    }
+                }
             }
             return _instance;
         }

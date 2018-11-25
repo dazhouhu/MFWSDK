@@ -1,241 +1,337 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
-	<head>
-	  <meta charset="UTF-8">
-	  <title>设置</title>
-	  <meta name="renderer" content="webkit">
-	  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	  <meta name="apple-mobile-web-app-status-bar-style" content="black"> 
-	  <meta name="apple-mobile-web-app-capable" content="yes">
-	  <meta name="format-detection" content="telephone=no">
-	  <link rel="stylesheet" type="text/css" href="public/layui/css/layui.css"/>
-	  <link rel="stylesheet" type="text/css" href="public/font-awesome-4.7.0/css/font-awesome.min.css"/>
-	</head>
-	<body>
-		<style type="text/css">
-		html,
-		body { height: 100%; padding: 0; margin: 0;font-family: "微软雅黑";font-size: 14px;color: white; }
-		.search_input, input::-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-   		 color:white; opacity:1; 
-			}
-	
+<head>
+    <meta charset="UTF-8">
+    <title>系统设置</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="public/layui/css/layui.css" />
+    <link rel="stylesheet" type="text/css" href="public/font-awesome-4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="public/css/commom.css" />
+</head>
+    <body>
+        <style type="text/css">           
+            .optionbutton {
+                float: left;
+                line-height: 2rem;
+            }
 
-		.search_input, input::-moz-placeholder { /* Mozilla Firefox 19+ */
-			    color:white;opacity:1;
-			}
-			
-		.search_input, input:-ms-input-placeholder{
-			    color:white;opacity:1;
-			}
-			
-		.search_input, input::-webkit-input-placeholder{
-			    color:white;opacity:1;
-			}
-		}
-		.search_input, input::input-placeholder{
-			color:white;
-		}
-		.body{height: 100%;width: 100%;background: url(public/images/background.jpg);background-repeat: no-repeat;background-size: 100% 100%;}
-		.logo{float:left;font-size: 3rem;color: white;}
-		.right_top{float: right;margin-top: 1rem;}
-		.top{width: 96%;margin:0 auto;padding-top:1.5rem;position: relative;height: auto;}
-		.search_input {float: left;width: 23rem;background: rgb(91,109,119);border-radius: 5px;margin-right: 2.2rem;}
-		.search_input input {float:left;background: rgb(91,109,119);border: none;color: white;height: 2.2rem;}
-		.optionbutton{float: left;line-height: 2rem;}
-		.op:hover{background: rgb(95,118,132);border-radius: 5px;}
-		.op{float: left;padding: 0 0.4rem;cursor: pointer;}
-		.serach_ico{float: left;line-height: 2rem;padding: 0 0.5rem;height: 2.2rem;}
-		.serach_ico img{width: 100%;}
-		.search_input input{width: 85%;}
-		.center_body{width: 70%;height: 50%;text-align: center;margin: auto;margin-top: 10%;}
-		.bg{background: rgb(91,109,119);}
-		.titlenav{border: none;border-radius:5px;}
-		.titlenav li{width: 20%;height: 5rem;line-height: 2.9rem;float: left;color: white;font-size: 1.5rem;}
-		.tablebodydiy{width:96%;margin: auto;margin-top: 2rem;border-radius: 5px;color: white;border-collapse: collapse;border-spacing: 0;}
-    	.tablebodydiy tr{height: 7rem;border-bottom: 1px solid #999999;}
-		.tablebodydiy td{width: 20%;text-align: center;letter-spacing:0.2rem;}
-		.tablebodydiy td img{padding: 0 1rem;}
-		.tablebodydiy tr:last-child{border: none;}
-		.tablecon{width: 100%;text-align: center;border-radius: 5px;}
-		.cell{width: 3rem;height: 3rem;border-radius: 3rem;line-height: 3rem;background: rgb(17,161,234);margin: auto;text-align: center;}
-		.cell_text{font-size: 0.8rem;}
-		.bottom1{width: 100%;max-height: 5rem;margin-top: 2%;}
-		.next{width: 3rem;margin: auto;cursor: pointer;}
-		.diyico{font-size: 2rem;}
-		.page{width: 6rem;float: right;}
-		.p1{font-size: 1.5rem;}
-		.video{cursor: pointer;}
-		.call{cursor: pointer;}
-		.bottom{width: 40%;margin: 0 auto;text-align: center;height: 10%;margin-top: 2%;}
-		.bottom li{padding: 3% 4.8%;float: left;width: 10%;}
-		.bottom img{cursor: pointer;}
-		.bottom p{padding-top: 1rem;text-align: center;font-size: 1rem;}
-		.center_body_li{width: 20%;height: 20rem;float: left;background: rgb(47,57,66);line-height: 20rem;border-radius: 5px;margin-left: 2.5%;margin-right: 2.5%;cursor: pointer;}
-		.center_body_img{width: 100%;height: 5rem;}
-		.change{font-size:1.3rem;float: left;width:21%;height: 22rem;margin-right: 1.5%;line-height: 22rem;margin-top: -1rem;background: rgb(17,161,234);border-radius: 5px;margin-left: 2.5%;cursor: pointer;}
-		
-		
-		</style>
-		<div class="body">
-			<div class="top">
-				<div class="logo">
-				Logo
-			</div>
-			<div class="right_top">
-				<div class="search_input">
-					<div class="serach_ico">
-						<img src="public/images/search.png"/>
-					</div>
-					
-						<input type="text" name="search"  lay-verify="required"  placeholder="搜索联系人" class="">
-					
-				</div>
-				<div class="optionbutton">
-					<div class="op">
-						<img src="public/images/min.png"/>
-					</div>
-					<div class="op">
-						<img src="public/images/max.png"/>
-						</div>
-					<div class="op">
-						<img src="public/images/close2.png"/>
-					</div>
-					
-				</div>
-			</div>
-			</div>
-			
-			<div class="center_body">
-			<ul>
-				<li class="center_body_li grzx"><div class="center_body_img "><img src="public/images/grzx1.png"/></div><p>个人中心</p></li>
-				<li class="center_body_li bbsj"><div class="center_body_img "><img src="public/images/bbsj2.png"/></div><p>版保升级</p></li>
-				<li class="center_body_li rzgl"><div class="center_body_img "><img src="public/images/rzgl2.png"/></div><p>日志管理</p></li>
-				<li class="center_body_li gycp"><div class="center_body_img "><img src="public/images/gycp2.png"/></div><p>关于产品</p></li>
-			</ul>
-		      
-				
-		     
-		   </div> 
-		  
-		   
-		   <div class="bottom">
-				<ul>
-					<li id="huiyi"><img src="public/images/10-1@2x.png"/><p>会议</p></li>
-					<li id="lianxiren"><img src="public/images/11@2x.png"/><p>联系人</p></li>
-					<li id="hujiao"><img src="public/images/12@2x.png"/><p>呼叫</p></li>
-					<li id="shezhi"><img src="public/images/13@2x.png"/><p>设置</p></li>
-					<li id="tuichu"><img src="public/images/14@2x.png"/><p>退出</p></li>
-				</ul>
-			</div>
-	 </div> 
-		   
-		 
-		     
- 		
-		<script src="public/layui/layui.js"></script>
+            .op:hover {
+                background: rgb(95,118,132);
+                border-radius: 5px;
+            }
 
-		<script type="text/javascript">
-			layui.use(['jquery', 'form','layer'], function () {
-				
-				var $ = layui.$ ;
-        		var form = layui.form;
-        		var layer = layui.layer;
+            .op {
+                float: left;
+                padding: 0 0.4rem;
+                cursor: pointer;
+            }
 
-		    $("#huiyi").hover(function(){	
-				$(this).find("img").attr("src","public/images/10@2x.png");
-				$(this).find("p").css("font-size","1.2rem");
-			},function(){
-				$(this).find("img").attr("src","public/images/10-1@2x.png");
-				$(this).find("p").css("font-size","1rem");
-			});
-			
-			
-			$("#tuichu").hover(function(){	
-				$(this).find("img").attr("src","public/images/14-1@2x.png");
-				$(this).find("p").css("font-size","1.2rem");
-			},function(){
-				$(this).find("img").attr("src","public/images/14@2x.png");
-				$(this).find("p").css("font-size","1rem");
-			});
-			
-			
-			
-			$("#shezhi").hover(function(){	
-				$(this).find("img").attr("src","public/images/13-1@2x.png");
-				$(this).find("p").css("font-size","1.2rem");
-			},function(){
-				$(this).find("img").attr("src","public/images/13@2x.png");
-				$(this).find("p").css("font-size","1rem");
-			});
-			
-			
-			
-			$("#lianxiren").hover(function(){	
-				$(this).find("img").attr("src","public/images/11-1@2x.png");
-				$(this).find("p").css("font-size","1.2rem");
-			},function(){
-				$(this).find("img").attr("src","public/images/11@2x.png");
-				$(this).find("p").css("font-size","1rem");
-			});
-			
-			
-			
-			$("#hujiao").hover(function(){	
-				$(this).find("img").attr("src","public/images/12-1@2x.png");
-				$(this).find("p").css("font-size","1.2rem");
-			},function(){
-				$(this).find("img").attr("src","public/images/12@2x.png");
-				$(this).find("p").css("font-size","1rem");
-			});
-			
-			
-			$(".grzx").hover(function(){	
-				$(this).find("img").attr("src","public/images/grzx2.png");
-				$(this).removeClass("center_body_li");
-				$(this).addClass("change");
-			},function(){
-				$(this).find("img").attr("src","public/images/grzx1.png");
-				$(this).removeClass("change");
-				$(this).addClass("center_body_li");
-			});
-			
-			$(".bbsj").hover(function(){	
-				$(this).find("img").attr("src","public/images/bbsj1.png");
-				$(this).removeClass("center_body_li");
-				$(this).addClass("change");
-			},function(){
-				$(this).find("img").attr("src","public/images/bbsj2.png");
-				$(this).removeClass("change");
-				$(this).addClass("center_body_li");
-			});
-			
-			$(".rzgl").hover(function(){	
-				$(this).find("img").attr("src","public/images/rzgl1.png");
-				$(this).removeClass("center_body_li");
-				$(this).addClass("change");
-			},function(){
-				$(this).find("img").attr("src","public/images/rzgl2.png");
-				$(this).removeClass("change");
-				$(this).addClass("center_body_li");
-			});
-			
-			
-			$(".gycp").hover(function(){	
-				$(this).find("img").attr("src","public/images/gycp1.png");
-				$(this).removeClass("center_body_li");
-				$(this).addClass("change");
-			},function(){
-				$(this).find("img").attr("src","public/images/gycp2.png");
-				$(this).removeClass("change");
-				$(this).addClass("center_body_li");
-			});
-			
-			
 
-   			 });
-   			 
-   			
-		</script>
-	</body>
+            .center_body {
+                width: 70%;
+                height: 50%;
+                text-align: center;
+                margin: auto;
+                margin-top: 10%;
+            }
+
+            .bg {
+                background: rgb(91,109,119);
+            }
+
+            .titlenav {
+                border: none;
+                border-radius: 5px;
+            }
+
+                .titlenav li {
+                    width: 20%;
+                    height: 5rem;
+                    line-height: 2.9rem;
+                    float: left;
+                    color: white;
+                    font-size: 1.5rem;
+                }
+
+            .tablebodydiy {
+                width: 96%;
+                margin: auto;
+                margin-top: 2rem;
+                border-radius: 5px;
+                color: white;
+                border-collapse: collapse;
+                border-spacing: 0;
+            }
+
+                .tablebodydiy tr {
+                    height: 7rem;
+                    border-bottom: 1px solid #999999;
+                }
+
+                .tablebodydiy td {
+                    width: 20%;
+                    text-align: center;
+                    letter-spacing: 0.2rem;
+                }
+
+                    .tablebodydiy td img {
+                        padding: 0 1rem;
+                    }
+
+                .tablebodydiy tr:last-child {
+                    border: none;
+                }
+
+            .tablecon {
+                width: 100%;
+                text-align: center;
+                border-radius: 5px;
+            }
+
+            .cell {
+                width: 3rem;
+                height: 3rem;
+                border-radius: 3rem;
+                line-height: 3rem;
+                background: rgb(17,161,234);
+                margin: auto;
+                text-align: center;
+            }
+
+            .cell_text {
+                font-size: 0.8rem;
+            }
+
+            .bottom1 {
+                width: 100%;
+                max-height: 5rem;
+                margin-top: 2%;
+            }
+
+            .next {
+                width: 3rem;
+                margin: auto;
+                cursor: pointer;
+            }
+
+            .diyico {
+                font-size: 2rem;
+            }
+
+            .page {
+                width: 6rem;
+                float: right;
+            }
+
+            .p1 {
+                font-size: 1.5rem;
+            }
+
+            .video {
+                cursor: pointer;
+            }
+
+            .call {
+                cursor: pointer;
+            }
+
+            .center_body_li {
+                width: 20%;
+                height: 20rem;
+                float: left;
+                background: rgb(47,57,66);
+                line-height: 20rem;
+                border-radius: 5px;
+                margin-left: 2.5%;
+                margin-right: 2.5%;
+                cursor: pointer;
+            }
+
+            .center_body_img {
+                width: 100%;
+                height: 5rem;
+            }
+
+            .change {
+                font-size: 1.3rem;
+                float: left;
+                width: 21%;
+                height: 22rem;
+                margin-right: 1.5%;
+                line-height: 22rem;
+                margin-top: -1rem;
+                background: rgb(17,161,234);
+                border-radius: 5px;
+                margin-left: 2.5%;
+                cursor: pointer;
+            }
+        </style>
+        <div class="body">
+            <div class="top">
+                <div class="logo">
+                    系统设置
+                </div>
+                <div class="right_top">
+                    <div class="search_input">
+                        <div class="serach_ico">
+                            <img src="public/images/search.png" />
+                        </div>
+
+                        <input type="text" name="search" lay-verify="required" placeholder="搜索联系人" class="">
+
+                    </div>
+                    <div class="optionbutton">
+                        <div class="op">
+                            <img src="public/images/min.png" />
+                        </div>
+                        <div class="op">
+                            <img src="public/images/max.png" />
+                        </div>
+                        <div class="op">
+                            <img src="public/images/close2.png" />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="center_body">
+                <ul>
+                    <li class="center_body_li grzx"><div class="center_body_img "><img src="public/images/grzx1.png" /></div><p>个人中心</p></li>
+                    <li class="center_body_li bbsj"><div class="center_body_img "><img src="public/images/bbsj2.png" /></div><p>版保升级</p></li>
+                    <li class="center_body_li rzgl"><div class="center_body_img "><img src="public/images/rzgl2.png" /></div><p>日志管理</p></li>
+                    <li class="center_body_li gycp"><div class="center_body_img "><img src="public/images/gycp2.png" /></div><p>关于产品</p></li>
+                </ul>
+
+
+
+            </div>
+
+
+            <div class="bottom">
+                <ul>
+                    <li id="huiyi"><div class="icon"></div><p>会议</p></li>
+                    <li id="lianxiren"><div class="icon"></div><p>联系人</p></li>
+                    <li id="hujiao"><div class="icon"></div><p>呼叫</p></li>
+                    <li id="shezhi" class="active"><div class="icon"></div><p>设置</p></li>
+                    <li id="tuichu"><div class="icon"></div><p>退出</p></li>
+                </ul>
+            </div>
+        </div>
+
+
+
+
+        <script src="public/layui/layui.js"></script>
+
+        <script src="public/js/utilities.js"></script>
+        <script src="public/js/common.js"></script>
+        <script type="text/javascript">
+            layui.use(['jquery', 'form', 'layer'], function () {
+
+                var $ = layui.$;
+                var form = layui.form;
+                var layer = layui.layer;
+
+                $("#huiyi").hover(function () {
+                    $(this).find("img").attr("src", "public/images/10@2x.png");
+                    $(this).find("p").css("font-size", "1.2rem");
+                }, function () {
+                    $(this).find("img").attr("src", "public/images/10-1@2x.png");
+                    $(this).find("p").css("font-size", "1rem");
+                });
+
+
+                $("#tuichu").hover(function () {
+                    $(this).find("img").attr("src", "public/images/14-1@2x.png");
+                    $(this).find("p").css("font-size", "1.2rem");
+                }, function () {
+                    $(this).find("img").attr("src", "public/images/14@2x.png");
+                    $(this).find("p").css("font-size", "1rem");
+                });
+
+
+
+                $("#shezhi").hover(function () {
+                    $(this).find("img").attr("src", "public/images/13-1@2x.png");
+                    $(this).find("p").css("font-size", "1.2rem");
+                }, function () {
+                    $(this).find("img").attr("src", "public/images/13@2x.png");
+                    $(this).find("p").css("font-size", "1rem");
+                });
+
+
+
+                $("#lianxiren").hover(function () {
+                    $(this).find("img").attr("src", "public/images/11-1@2x.png");
+                    $(this).find("p").css("font-size", "1.2rem");
+                }, function () {
+                    $(this).find("img").attr("src", "public/images/11@2x.png");
+                    $(this).find("p").css("font-size", "1rem");
+                });
+
+
+
+                $("#hujiao").hover(function () {
+                    $(this).find("img").attr("src", "public/images/12-1@2x.png");
+                    $(this).find("p").css("font-size", "1.2rem");
+                }, function () {
+                    $(this).find("img").attr("src", "public/images/12@2x.png");
+                    $(this).find("p").css("font-size", "1rem");
+                });
+
+
+                $(".grzx").hover(function () {
+                    $(this).find("img").attr("src", "public/images/grzx2.png");
+                    $(this).removeClass("center_body_li");
+                    $(this).addClass("change");
+                }, function () {
+                    $(this).find("img").attr("src", "public/images/grzx1.png");
+                    $(this).removeClass("change");
+                    $(this).addClass("center_body_li");
+                });
+
+                $(".bbsj").hover(function () {
+                    $(this).find("img").attr("src", "public/images/bbsj1.png");
+                    $(this).removeClass("center_body_li");
+                    $(this).addClass("change");
+                }, function () {
+                    $(this).find("img").attr("src", "public/images/bbsj2.png");
+                    $(this).removeClass("change");
+                    $(this).addClass("center_body_li");
+                });
+
+                $(".rzgl").hover(function () {
+                    $(this).find("img").attr("src", "public/images/rzgl1.png");
+                    $(this).removeClass("center_body_li");
+                    $(this).addClass("change");
+                }, function () {
+                    $(this).find("img").attr("src", "public/images/rzgl2.png");
+                    $(this).removeClass("change");
+                    $(this).addClass("center_body_li");
+                });
+
+
+                $(".gycp").hover(function () {
+                    $(this).find("img").attr("src", "public/images/gycp1.png");
+                    $(this).removeClass("center_body_li");
+                    $(this).addClass("change");
+                }, function () {
+                    $(this).find("img").attr("src", "public/images/gycp2.png");
+                    $(this).removeClass("change");
+                    $(this).addClass("center_body_li");
+                });
+
+
+
+            });
+
+
+        </script>
+    </body>
 </html>
