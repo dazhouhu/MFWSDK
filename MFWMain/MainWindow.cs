@@ -61,10 +61,10 @@ namespace MFWMain
 
             //var devToolPath ="file:///" + (Application.StartupPath + @"\front_end\inspector.html").Replace("\\","/");
             var devToolPath = "file:///D:/test/miniblinknet/Demo/bin/Debug/front_end/inspector.html";
-            webView.SetDebugConfig("showDevTools", devToolPath);
-            webView.ShowDevtools(devToolPath, null, IntPtr.Zero);
+            //webView.SetDebugConfig("showDevTools", devToolPath);
+            //webView.ShowDevtools(devToolPath, null, IntPtr.Zero);
             //webView.LoadFile(@"Assets\pages\login.html");
-            webView.LoadFile(@"Assets\pages\meeting.html");
+            webView.LoadFile(@"Assets\pages\login.html");
 
             vpxWindow = new VPXWindow();
             toolbar = new MFWToolBar();

@@ -96,11 +96,12 @@ namespace MFW.Tool
         {
             switch (args.PropertyName)
             {
-                case "CallState": break;
-                case "IsAudioOnly": break;
-                case "IsContentSupported": break;
+                case "CallState": 
+                case "IsAudioOnly":
+                case "CallMode":
+                case "IsContentSupported":
                     {
-                        bindDeviceStatus();
+                        //bindDeviceStatus();
                     }
                     break;
             }
