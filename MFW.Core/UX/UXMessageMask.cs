@@ -15,11 +15,13 @@ namespace MFW.Core
         private UXMessageMask()
         {
             InitializeComponent();
+            this.BackColor = Color.Transparent;
             SetStyle(ControlStyles.Opaque | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
         }
 
         protected override void OnPaint(PaintEventArgs pe)
         {
+            /*
             Color drawColor = Color.FromArgb(127, this.BackColor);
             //// 定义画笔
             Pen labelBorderPen = new Pen(drawColor, 0);
@@ -27,7 +29,7 @@ namespace MFW.Core
             //// 绘制背景色
             pe.Graphics.DrawRectangle(labelBorderPen, 0, 0, Size.Width, Size.Height);
             pe.Graphics.FillRectangle(labelBackColorBrush, 0, 0, Size.Width, Size.Height);
-
+            */
 
             base.OnPaint(pe);
         }
@@ -118,6 +120,23 @@ namespace MFW.Core
             pnl.Disposed += (obj, args) => {
                 HideMessage(ownerPnl);
             };
+        }
+
+        private void UXMessageMask_SizeChanged(object sender, EventArgs e)
+        {
+            if(this.Controls.Count>0)
+            {
+                foreach (var control in this.Controls)
+                {
+                    var pnl = control as UserControl;
+                    if (null != pnl)
+                    {
+                        var x = (this.Width - pnl.Width) / 2;
+                        var y = (this.Height - pnl.Height) / 2;
+                        pnl.Location = new Point(x, y);
+                    }
+                }
+            }
         }
     }
 

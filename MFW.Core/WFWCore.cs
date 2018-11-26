@@ -818,6 +818,22 @@ namespace MFW.Core
         }
         #endregion
 
+        #region Media Statistics
+        public static void GetMediaStatistics(Call call)
+        {
+            if (null != call)
+            {
+                var errno=WrapperProxy.GetMediaStatistics(call.CallHandle);
+                if(errno != ErrorNumber.OK)
+                {
+                    var msg = "GetMediaStatistics failed, errno=" + errno;
+                    log.Error(msg);
+                    throw new Exception(msg);
+                }
+            }
+        }
+        #endregion
+
         #region 析构函数
         /// <summary>
         /// 取消注册

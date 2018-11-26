@@ -54,7 +54,7 @@
             // tbSpeakerVolume
             // 
             this.tbSpeakerVolume.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.tbSpeakerVolume.Location = new System.Drawing.Point(261, -120);
+            this.tbSpeakerVolume.Location = new System.Drawing.Point(261, -109);
             this.tbSpeakerVolume.Maximum = 128;
             this.tbSpeakerVolume.Name = "tbSpeakerVolume";
             this.tbSpeakerVolume.Orientation = System.Windows.Forms.Orientation.Vertical;
@@ -67,7 +67,7 @@
             // tbMicVolume
             // 
             this.tbMicVolume.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.tbMicVolume.Location = new System.Drawing.Point(181, -120);
+            this.tbMicVolume.Location = new System.Drawing.Point(181, -109);
             this.tbMicVolume.Maximum = 128;
             this.tbMicVolume.Name = "tbMicVolume";
             this.tbMicVolume.Orientation = System.Windows.Forms.Orientation.Vertical;

@@ -28,7 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
+            this.SuspendLayout();
+            // 
+            // UXMessageMask
+            // 
+            this.SizeChanged += new System.EventHandler(this.UXMessageMask_SizeChanged);
+            this.ResumeLayout(false);
+
         }
 
         #endregion

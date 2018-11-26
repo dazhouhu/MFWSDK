@@ -62,7 +62,7 @@
       <DependentUpon>ContentSelectPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="UX\SignalPanel.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UX\SignalPanel.Designer.cs">
       <DependentUpon>SignalPanel.cs</DependentUpon>
@@ -78,9 +78,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UX\ContentSelectPanel.resx">
       <DependentUpon>ContentSelectPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UX\SignalPanel.resx">
-      <DependentUpon>SignalPanel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
