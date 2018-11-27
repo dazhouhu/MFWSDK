@@ -139,6 +139,9 @@
     <EmbeddedResource Include="UX\ChannelView.resx">
       <DependentUpon>ChannelView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UX\UXMessageMask.resx">
+      <DependentUpon>UXMessageMask.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\alert.png" />

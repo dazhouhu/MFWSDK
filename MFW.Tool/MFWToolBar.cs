@@ -61,6 +61,8 @@ namespace MFW.Tool
             {
                 this.Width = ownerPnl.Width;
             };
+            ownerPnl.Controls.Add(tbMicVolume);
+            ownerPnl.Controls.Add(tbSpeakerVolume);
         }
         #endregion
 
@@ -178,7 +180,21 @@ namespace MFW.Tool
         }
         private void btnSignal_Click(object sender, EventArgs e)
         {
-
+            if (null == _currentCall)
+                return;
+            try
+            {
+                MFWCore.GetMediaStatistics(_currentCall);
+                var signalWin = new SignalPanel()
+                {
+                    OnOk = () => { }
+                };
+                UXMessageMask.ShowForm(ownerPnl, signalWin);
+            }
+            catch(Exception ex)
+            {
+                UXMessageMask.ShowMessage(ownerPnl, false,ex.Message,MessageBoxButtonsType.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnMic_Click(object sender, EventArgs e)
@@ -187,7 +203,7 @@ namespace MFW.Tool
             tbMicVolume.Focus();
             tbMicVolume.BringToFront();
             tbMicVolume.Left = btnMic.Left + 10;
-            tbMicVolume.Top = this.Height - 80 - 158;
+            tbMicVolume.Top = this.Top - 118;
         }
 
         private void btnSpeaker_Click(object sender, EventArgs e)
@@ -196,7 +212,7 @@ namespace MFW.Tool
             tbSpeakerVolume.Focus();
             tbSpeakerVolume.BringToFront();
             tbSpeakerVolume.Left = btnSpeaker.Left + 10;
-            tbSpeakerVolume.Top = this.Height - 80 - 158;
+            tbSpeakerVolume.Top = this.Top - 118;
         }
         private bool _muteCamera = true;
         public bool MuteCamera
