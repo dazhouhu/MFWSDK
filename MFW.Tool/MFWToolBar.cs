@@ -215,25 +215,27 @@ namespace MFW.Tool
         {
             if (true == MuteCamera)
             {
-                if (ErrorNumber.OK == MFWCore.StartCamera())
+                try
                 {
+                    MFWCore.StartCamera();
                     MuteCamera = false;
                 }
-                else
+                catch(Exception ex)
                 {
-                    UXMessageMask.ShowMessage(ownerPnl, false, "启动摄像头失败！", MessageBoxButtonsType.OK, MessageBoxIcon.Error);
-                }
+                    UXMessageMask.ShowMessage(ownerPnl, false, ex.Message, MessageBoxButtonsType.OK, MessageBoxIcon.Error);
+                }                
             }
             else
             {
-                if (ErrorNumber.OK == MFWCore.StopCamera())
+                try
                 {
+                    MFWCore.StopCamera();
                     MuteCamera = true;
                 }
-                else
+                catch (Exception ex)
                 {
-                    UXMessageMask.ShowMessage(ownerPnl, false, "关闭摄像头失败！", MessageBoxButtonsType.OK, MessageBoxIcon.Error);
-                }
+                    UXMessageMask.ShowMessage(ownerPnl, false, ex.Message, MessageBoxButtonsType.OK, MessageBoxIcon.Error);
+                }                
             }
         }
 
@@ -246,33 +248,31 @@ namespace MFW.Tool
                 Monitors = deviceManager.GetDevicesByType(DeviceType.MONITOR),
                 Apps = deviceManager.GetDevicesByType(DeviceType.APPLICATIONS),
                 OKAction = (type, format, monitor, app) => {
-                    switch (type)
+                    try
                     {
-                        case "Monitor":
-                            {
-                                var errno = MFWCore.StartShareContent(_currentCall, monitor, app);
-                                if (errno != ErrorNumber.OK)
+                        switch (type)
+                        {
+                            case "Monitor":
                                 {
-                                    MessageBox.Show(this, "共享内容失败！", "消息框", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                    return false;
+                                    MFWCore.StartShareContent(monitor, app);
                                 }
-                            }
-                            break;
-                        case "BFCP":
-                            {
-                                var width = Screen.PrimaryScreen.Bounds.Width;
-                                var height = Screen.PrimaryScreen.Bounds.Height;
-                                MFWCore.SetContentBuffer(format, width, height);
-                                var errno = MFWCore.StartBFCPContent(_currentCall);
-                                if (errno != ErrorNumber.OK)
+                                break;
+                            case "BFCP":
                                 {
-                                    MessageBox.Show(this, "共享内容失败！", "消息框", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                    return false;
+                                    var width = Screen.PrimaryScreen.Bounds.Width;
+                                    var height = Screen.PrimaryScreen.Bounds.Height;
+                                    MFWCore.SetContentBuffer(format, width, height);
+                                    MFWCore.StartBFCPContent();
                                 }
-                            }
-                            break;
+                                break;
+                        }
+                        return true;
                     }
-                    return true;
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show(this, ex.Message, "消息框", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return false;
+                    }
                 },
                 OnCancel = () => { }
             };
@@ -287,7 +287,6 @@ namespace MFW.Tool
         private void btnMore_Click(object sender, EventArgs e)
         {
             moreMenu.Show(btnMore, new Point(0, 0), ToolStripDropDownDirection.AboveRight);
-
         }
         private void btnExit_Click(object sender, EventArgs e)
         {
@@ -325,28 +324,30 @@ namespace MFW.Tool
             if (null == _currentCall)
                 return;
             var volume = tbMicVolume.Value;
-            if (0 == volume)
+
+            try
             {
-                if (ErrorNumber.OK == MFWCore.MuteMic(_currentCall, true))
+                MFWCore.SetMicVolume(volume);
+                if (0 == volume)
                 {
+                    MFWCore.MuteMic(true);
                     this.btnMic.Image = Properties.Resources.mic_mute;
                 }
-            }
-            else
-            {
-                if (ErrorNumber.OK == MFWCore.MuteMic(_currentCall, false))
+                else
                 {
+                    MFWCore.MuteMic(false);
                     this.btnMic.Image = Properties.Resources.mic;
                 }
+
             }
-            if (ErrorNumber.OK != MFWCore.SetMicVolume(volume))
+            catch (Exception ex)
             {
                 Action okAction = () =>
                 {
                     volume = MFWCore.GetMicVolume();
                     this.tbMicVolume.Value = volume;
                 };
-                UXMessageMask.ShowMessage(ownerPnl, false, "设置麦克风音量失败!", MessageBoxButtonsType.OK, MessageBoxIcon.Error
+                UXMessageMask.ShowMessage(ownerPnl, false, ex.Message, MessageBoxButtonsType.OK, MessageBoxIcon.Error
                                             , okAction);
             }
         }
@@ -354,23 +355,24 @@ namespace MFW.Tool
         private void tbSpeakerVolume_ValueChanged(object sender, EventArgs e)
         {
             var volume = tbSpeakerVolume.Value;
-            if (0 == volume)
+            try
             {
-                if (ErrorNumber.OK == MFWCore.MuteSpeaker(true))
+                MFWCore.SetSpeakerVolume(volume);
+                if (0 == volume)
                 {
+                    MFWCore.MuteSpeaker(true);
                     this.btnSpeaker.Image = Properties.Resources.speaker_mute;
+
                 }
-            }
-            else
-            {
-                if (ErrorNumber.OK == MFWCore.MuteSpeaker(false))
+                else
                 {
+                    MFWCore.MuteSpeaker(false);
                     this.btnSpeaker.Image = Properties.Resources.speaker;
                 }
             }
-            if (ErrorNumber.OK != MFWCore.SetSpeakerVolume(volume))
-            {
-                if (MessageBox.Show(this, "设置麦克风音量失败!", "消息框", MessageBoxButtons.OK, MessageBoxIcon.Error) == DialogResult.OK)
+            catch(Exception ex)
+            { 
+                if (MessageBox.Show(this, ex.Message, "消息框", MessageBoxButtons.OK, MessageBoxIcon.Error) == DialogResult.OK)
                 {
                     volume = MFWCore.GetSpeakerVolume();
                     this.tbSpeakerVolume.Value = volume;

@@ -63,6 +63,7 @@
     <Compile Include="Model\Channel.cs" />
     <Compile Include="Model\Device.cs" />
     <Compile Include="Model\Event.cs" />
+    <Compile Include="Model\MediaStatistics.cs" />
     <Compile Include="PropertyManager.cs" />
     <Compile Include="UX\CallView.cs">
       <SubType>UserControl</SubType>

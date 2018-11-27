@@ -1,6 +1,8 @@
 ﻿using log4net;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -11,8 +13,11 @@ namespace MFW.Core
     {
         #region Fields
         private static ILog log = LogManager.GetLogger("MFWCore");
+        private static ObservableCollection<MediaStatistics> mediaStatistics = new ObservableCollection<MediaStatistics>();
+        private static Action<ObservableCollection<MediaStatistics>> mediaStatisticsCallBack;
         private static DeviceManager deviceManager = DeviceManager.GetInstance();
         private static PropertyManager propertyManager = PropertyManager.GetInstance();
+        private static CallManager callManager = CallManager.GetInstance();
         private static CallView callView = CallView.GetInstance();
         #endregion
 
@@ -36,7 +41,10 @@ namespace MFW.Core
         static MFWCore()
         {
             StartEventMonitor();
-
+            mediaStatistics.CollectionChanged += (sender, args) =>
+            {
+                mediaStatisticsCallBack?.Invoke(mediaStatistics);
+            };
             var errno = ErrorNumber.OK;
             //注册回调函数
             errno = WrapperProxy.InstallCallback(addEventCallback, dispatchEventsCallback, addLogCallback, addDeviceCallback,
@@ -200,6 +208,11 @@ namespace MFW.Core
                 throw new Exception(errMsg);
             }
         }
+        #endregion
+
+        #region Properties
+        public static Action RegisterAction { get; set; }
+        public static Action UnregisterAction { get; set; }
         #endregion
 
         #region Events
@@ -462,13 +475,18 @@ namespace MFW.Core
                     #endregion
 
                 #region 不处理
-                /*
                 #region Register
                 case EventType.UNKNOWN:break;
-                case EventType.SIP_REGISTER_SUCCESS: break;
-                case EventType.SIP_REGISTER_FAILURE: break;
+                case EventType.SIP_REGISTER_SUCCESS:
+                    {
+                        RegisterAction?.Invoke();
+                    } break;
+                case EventType.SIP_REGISTER_FAILURE: {
+                        UnregisterAction?.Invoke();
+                    } break;
                 case EventType.SIP_REGISTER_UNREGISTERED:break;
                 #endregion
+                /*
                 #region Call
                 case EventType.SIP_CALL_INCOMING: break;
                 case EventType.SIP_CALL_TRYING:break;
@@ -599,47 +617,71 @@ namespace MFW.Core
                  IntPtr videoFormatPtr, IntPtr errorConcealmentPtr, IntPtr audioProtocolPtr, IntPtr audioRatePtr, IntPtr audioPacketsLostPtr, IntPtr audioJitterPtr,
                  IntPtr audioEncryptPtr, IntPtr videoEncryptPtr, IntPtr feccEncryptPtr, IntPtr audioReceivedPacketPtr, IntPtr roundTripTimePtr,
                  IntPtr fullIntraFrameRequestPtr, IntPtr intraFrameSentPtr, IntPtr packetsCountPtr, IntPtr overallCPULoadPtr, IntPtr channelNumPtr)
-         {
-             var channelName = IntPtrHelper.IntPtrTostring(channelNamePtr);
-             var strParticipantName = IntPtrHelper.IntPtrTostring(strParticipantNamePtr);
-             var remoteSystemId = IntPtrHelper.IntPtrTostring(remoteSystemIdPtr);
-             var callRate = IntPtrHelper.IntPtrTostring(callRatePtr);
-             var packetsLost = IntPtrHelper.IntPtrTostring(packetsLostPtr);
-             var packetLoss = IntPtrHelper.IntPtrTostring(packetLossPtr);
-             var videoProtocol = IntPtrHelper.IntPtrTostring(videoProtocolPtr);
-             var videoRate = IntPtrHelper.IntPtrTostring(videoRatePtr);
-             var videoRateUsed = IntPtrHelper.IntPtrTostring(videoRateUsedPtr);
-             var videoFrameRate = IntPtrHelper.IntPtrTostring(videoFrameRatePtr);
-             var videoPacketsLost = IntPtrHelper.IntPtrTostring(videoPacketsLostPtr);
-             var videoJitter = IntPtrHelper.IntPtrTostring(videoJitterPtr);
-             var videoFormat = IntPtrHelper.IntPtrTostring(videoFormatPtr);
-             var errorConcealment = IntPtrHelper.IntPtrTostring(errorConcealmentPtr);
-             var audioProtocol = IntPtrHelper.IntPtrTostring(audioProtocolPtr);
-             var audioRate = IntPtrHelper.IntPtrTostring(audioRatePtr);
-             var audioPacketsLost = IntPtrHelper.IntPtrTostring(audioPacketsLostPtr);
-             var audioJitter = IntPtrHelper.IntPtrTostring(audioJitterPtr);
-             var audioEncrypt = IntPtrHelper.IntPtrTostring(audioEncryptPtr);
-             var videoEncrypt = IntPtrHelper.IntPtrTostring(videoEncryptPtr);
-             var feccEncrypt = IntPtrHelper.IntPtrTostring(feccEncryptPtr);
-             var audioReceivedPacket = IntPtrHelper.IntPtrTostring(audioReceivedPacketPtr);
-             var roundTripTime = IntPtrHelper.IntPtrTostring(roundTripTimePtr);
-             var fullIntraFrameRequest = IntPtrHelper.IntPtrTostring(fullIntraFrameRequestPtr);
-             var intraFrameSent = IntPtrHelper.IntPtrTostring(intraFrameSentPtr);
-             var packetsCount = IntPtrHelper.IntPtrTostring(packetsCountPtr);
-             var overallCPULoad = IntPtrHelper.IntPtrTostring(overallCPULoadPtr);
-             var channelNum = IntPtrHelper.IntPtrTostring(channelNumPtr);
-             /*
-             MediaStatistics mediaStatistics = new MediaStatistics(new string[] { channelName, strParticipantName, remoteSystemId, callRate, packetsLost, packetLoss,
-                     videoProtocol, videoRate, videoRateUsed, videoFrameRate, videoPacketsLost, videoJitter,
-                     videoFormat, errorConcealment, audioProtocol, audioRate, audioPacketsLost, audioJitter,
-                     audioEncrypt, videoEncrypt, feccEncrypt, audioReceivedPacket, roundTripTime, fullIntraFrameRequest, intraFrameSent, packetsCount, overallCPULoad, channelNum });
-             log.Info("media channel number is " + mediaStatistics.getChannelNum());
-             if (0 != mediaStatistics.getChannelNum())
-             {
-                 mediaStatisticsDisplay.displayMediaStatistics(mediaStatistics);
-             }
-             */
-         }
+        {
+            var channelName = IntPtrHelper.IntPtrTostring(channelNamePtr);
+            var strParticipantName = IntPtrHelper.IntPtrTostring(strParticipantNamePtr);
+            var remoteSystemId = IntPtrHelper.IntPtrTostring(remoteSystemIdPtr);
+            var callRate = IntPtrHelper.IntPtrTostring(callRatePtr);
+            var packetsLost = IntPtrHelper.IntPtrTostring(packetsLostPtr);
+            var packetLoss = IntPtrHelper.IntPtrTostring(packetLossPtr);
+            var videoProtocol = IntPtrHelper.IntPtrTostring(videoProtocolPtr);
+            var videoRate = IntPtrHelper.IntPtrTostring(videoRatePtr);
+            var videoRateUsed = IntPtrHelper.IntPtrTostring(videoRateUsedPtr);
+            var videoFrameRate = IntPtrHelper.IntPtrTostring(videoFrameRatePtr);
+            var videoPacketsLost = IntPtrHelper.IntPtrTostring(videoPacketsLostPtr);
+            var videoJitter = IntPtrHelper.IntPtrTostring(videoJitterPtr);
+            var videoFormat = IntPtrHelper.IntPtrTostring(videoFormatPtr);
+            var errorConcealment = IntPtrHelper.IntPtrTostring(errorConcealmentPtr);
+            var audioProtocol = IntPtrHelper.IntPtrTostring(audioProtocolPtr);
+            var audioRate = IntPtrHelper.IntPtrTostring(audioRatePtr);
+            var audioPacketsLost = IntPtrHelper.IntPtrTostring(audioPacketsLostPtr);
+            var audioJitter = IntPtrHelper.IntPtrTostring(audioJitterPtr);
+            var audioEncrypt = IntPtrHelper.IntPtrTostring(audioEncryptPtr);
+            var videoEncrypt = IntPtrHelper.IntPtrTostring(videoEncryptPtr);
+            var feccEncrypt = IntPtrHelper.IntPtrTostring(feccEncryptPtr);
+            var audioReceivedPacket = IntPtrHelper.IntPtrTostring(audioReceivedPacketPtr);
+            var roundTripTime = IntPtrHelper.IntPtrTostring(roundTripTimePtr);
+            var fullIntraFrameRequest = IntPtrHelper.IntPtrTostring(fullIntraFrameRequestPtr);
+            var intraFrameSent = IntPtrHelper.IntPtrTostring(intraFrameSentPtr);
+            var packetsCount = IntPtrHelper.IntPtrTostring(packetsCountPtr);
+            var overallCPULoad = IntPtrHelper.IntPtrTostring(overallCPULoadPtr);
+            int channelNo = 0;
+            if (int.TryParse(IntPtrHelper.IntPtrTostring(channelNumPtr), out channelNo))
+            {
+                var statistics = new MediaStatistics()
+                {
+                    ChannelName = channelName,
+                    StrParticipantName = strParticipantName,
+                    RemoteSystemId = remoteSystemId,
+                    CallRate = callRate,
+                    PacketsLost = packetsLost,
+                    PacketLoss = packetLoss,
+                    VideoProtocol = videoProtocol,
+                    VideoRate = videoRate,
+                    VideoRateUsed = videoRateUsed,
+                    VideoFrameRate = videoFrameRate,
+                    VideoPacketsLost = videoPacketsLost,
+                    VideoJitter = videoJitter,
+                    VideoFormat = videoFormat,
+                    ErrorConcealment = errorConcealment,
+                    AudioProtocol = audioProtocol,
+                    AudioRate = audioRate,
+                    AudioPacketsLost = audioPacketsLost,
+                    AudioJitter = audioJitter,
+                    AudioEncrypt = audioEncrypt,
+                    VideoEncrypt = videoEncrypt,
+                    FeccEncrypt = feccEncrypt,
+                    AudioReceivedPacket = audioReceivedPacket,
+                    RoundTripTime = roundTripTime,
+                    FullIntraFrameRequest = fullIntraFrameRequest,
+                    IntraFrameSent = intraFrameSent,
+                    PacketsCount = packetsCount,
+                    overallCPULoad = overallCPULoad,
+                    ChannelNum = channelNo
+                };
+                MFWCore.mediaStatistics.Add(statistics);
+            }
+        }
         private static void DisplayCallStatisticsCallbackF(int timeInLastCall, int totalTime, int callPlaced, int callReceived, int callConnected)
          {
              /*
@@ -666,10 +708,10 @@ namespace MFW.Core
         #endregion
 
         #region 注册
-        public static void Register(string sipServer, string username, string password, Panel owner,IDictionary<PropertyKey,string> properties=null)
+        public static void Register(string sipServer, string username, string password, Panel owner, IDictionary<PropertyKey, string> properties = null, string displayName = null)
         {
             #region Valid
-            if(string.IsNullOrWhiteSpace(sipServer))
+            if (string.IsNullOrWhiteSpace(sipServer))
             {
                 throw new Exception("服务地址必须");
             }
@@ -686,16 +728,22 @@ namespace MFW.Core
                 throw new Exception("显示承载容器必须");
             }
             #endregion
-            if (null!=properties)
+            if (null != properties)
             {
                 propertyManager.SetProperties(properties);
+            }
+            var regid = username + "@" + sipServer;
+            if (string.IsNullOrWhiteSpace(displayName))
+            {
+                displayName = regid;
             }
             var ps = new Dictionary<PropertyKey, string>()
             {
                 { PropertyKey.PLCM_MFW_KVLIST_KEY_SIP_ProxyServer,sipServer },
                 { PropertyKey.PLCM_MFW_KVLIST_KEY_SIP_UserName,username },
                 { PropertyKey.PLCM_MFW_KVLIST_KEY_SIP_Password,password },
-                { PropertyKey.PLCM_MFW_KVLIST_KEY_REG_ID, username + "@" + sipServer }
+                { PropertyKey.PLCM_MFW_KVLIST_KEY_REG_ID,regid },
+                { PropertyKey.PLCM_MFW_KVLIST_KEY_DisplayName, displayName}
             };
             propertyManager.SetProperties(ps);
             var errno = WrapperProxy.UpdateConfig();
@@ -706,10 +754,10 @@ namespace MFW.Core
                 throw new Exception(errMsg);
             }
             callView.BindPanel(owner);
-            errno =WrapperProxy.RegisterClient();
-            if(errno != ErrorNumber.OK)
+            errno = WrapperProxy.RegisterClient();
+            if (errno != ErrorNumber.OK)
             {
-                var errMsg = string.Format("Register failed, Errno={0}",errno);
+                var errMsg = string.Format("Register failed, Errno={0}", errno);
                 log.Error(errMsg);
                 throw new Exception(errMsg);
             }
@@ -748,19 +796,38 @@ namespace MFW.Core
         #endregion
 
         #region Device Setting
-        public static ErrorNumber MuteMic(Call call, bool isMute)
+        public static void MuteMic(bool isMute)
         {
-            return WrapperProxy.MuteMic(call.CallHandle, isMute);
+            if (null != callManager.CurrentCall)
+            {
+                var errno=WrapperProxy.MuteMic(callManager.CurrentCall.CallHandle, isMute);
+                if(ErrorNumber.OK != errno)
+                {
+                    throw new Exception("麦克风静音设置失败,errno="+errno);
+                }
+            }
+            else
+            {
+                throw new Exception("当前呼叫为空，不能进行麦克风静音设置");
+            }
         }
 
-        public static ErrorNumber MuteSpeaker(bool isMute)
+        public static void MuteSpeaker(bool isMute)
         {
-            return WrapperProxy.MuteSpeaker(isMute);
+            var errno = WrapperProxy.MuteSpeaker(isMute);
+            if (ErrorNumber.OK != errno)
+            {
+                throw new Exception("扬声器静音设置失败,errno=" + errno);
+            }
         }
 
-        public static ErrorNumber SetMicVolume(int volume)
+        public static void SetMicVolume(int volume)
         {
-            return WrapperProxy.SetMicVolume(volume);
+            var errno = WrapperProxy.SetMicVolume(volume);
+            if (ErrorNumber.OK != errno)
+            {
+                throw new Exception("麦克风音量设置失败,errno=" + errno);
+            }
         }
 
         public static int GetMicVolume()
@@ -768,43 +835,113 @@ namespace MFW.Core
             return WrapperProxy.GetMicVolume();
         }
 
-        public static ErrorNumber SetSpeakerVolume(int volume)
+        public static void SetSpeakerVolume(int volume)
         {
-            return WrapperProxy.SetSpeakerVolume(volume);
+            var errno= WrapperProxy.SetSpeakerVolume(volume);
+            if (ErrorNumber.OK != errno)
+            {
+                throw new Exception("扬声器音量设置失败,errno=" + errno);
+            }
         }
 
         public static int GetSpeakerVolume()
         {
             return WrapperProxy.GetSpeakerVolume();
         }
-        public static ErrorNumber StartCamera()
+        public static void StartCamera()
         {
-            return WrapperProxy.StartCamera();
+            var errno= WrapperProxy.StartCamera();
+            if (ErrorNumber.OK != errno)
+            {
+                throw new Exception("开启摄像头失败,errno=" + errno);
+            }
         }
 
-        public static ErrorNumber StopCamera()
+        public static void StopCamera()
         {
-            return WrapperProxy.StopCamera();
+            var errno= WrapperProxy.StopCamera();
+            if (ErrorNumber.OK != errno)
+            {
+                throw new Exception("关闭摄像头失败,errno=" + errno);
+            }
         }
 
-        public static ErrorNumber StartShareContent(Call call, string deviceHandle, IntPtr appWndHandle)
+        public static void StartShareContent(string deviceHandle, IntPtr appWndHandle)
         {
-            return WrapperProxy.StartShareContent(call.CallHandle, deviceHandle, appWndHandle);
+            if (null != callManager.CurrentCall)
+            {
+                var errno = WrapperProxy.StartShareContent(callManager.CurrentCall.CallHandle, deviceHandle, appWndHandle);
+                if (ErrorNumber.OK != errno)
+                {
+                    throw new Exception("开始共享内容失败,errno=" + errno);
+                }
+            }
+            else
+            {
+                throw new Exception("当前呼叫为空，不能共享内容");
+            }
         }
-        public static ErrorNumber StartBFCPContent(Call call)
+        public static void StartBFCPContent()
         {
-            return WrapperProxy.StartBFCPContent(call.CallHandle);
+            if (null != callManager.CurrentCall)
+            {
+                var errno = WrapperProxy.StartBFCPContent(callManager.CurrentCall.CallHandle);
+                if (ErrorNumber.OK != errno)
+                {
+                    throw new Exception("开始共享内容失败,errno=" + errno);
+                }
+            }
+            else
+            {
+                throw new Exception("当前呼叫为空，不能共享内容");
+            }
         }
 
-        public static ErrorNumber StopShareContent(Call call)
+        public static void StopShareContent()
         {
-            return WrapperProxy.StopShareContent(call.CallHandle);
+            if (null != callManager.CurrentCall)
+            {
+                var errno = WrapperProxy.StopShareContent(callManager.CurrentCall.CallHandle);
+                if (ErrorNumber.OK != errno)
+                {
+                    throw new Exception("结束共享内容失败,errno=" + errno);
+                }
+            }
+            else
+            {
+                throw new Exception("当前呼叫为空，不能结束共享内容");
+            }
         }
 
-        public static ErrorNumber SetContentBuffer(ImageFormat format, int width, int height)
+        public static void SetContentBuffer(ImageFormat format, int width, int height)
         {
-            return WrapperProxy.SetContentBuffer(format, width, height);
+            var errno= WrapperProxy.SetContentBuffer(format, width, height);
+            if (ErrorNumber.OK != errno)
+            {
+                throw new Exception("开始共享内容失败,errno=" + errno);
+            }
         }
+        #endregion
+
+        #region 
+        public static void GetMediaStatistics(Action<ObservableCollection<MediaStatistics>> callBack)
+        {
+            mediaStatistics.Clear();
+            if (null != callManager.CurrentCall)
+            {
+                var errno = WrapperProxy.GetMediaStatistics(callManager.CurrentCall.CallHandle);
+                if (ErrorNumber.OK != errno)
+                {
+                    throw new Exception("获取信号流信息失败,errno=" + errno);
+                }
+                mediaStatisticsCallBack = callBack;
+            }
+            else
+            {
+                throw new Exception("当前呼叫为空，获取信号流信息");
+            }
+        }
+
         #endregion
 
         #region ViewLayout
