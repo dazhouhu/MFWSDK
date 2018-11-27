@@ -2,9 +2,8 @@
 {
     public class MediaStatistics
     {
-        public int ChannelNum { get; set; }
         public string ChannelName { get; set; }
-        public string StrParticipantName { get; set; }
+        public string ParticipantName { get; set; }
         public string RemoteSystemId { get; set; }
         public string CallRate { get; set; }
         public string PacketsLost { get; set; }
@@ -29,6 +28,7 @@
         public string FullIntraFrameRequest { get; set; }
         public string IntraFrameSent { get; set; }
         public string PacketsCount { get; set; }
-        public string overallCPULoad { get; set; }
+        public string OverallCPULoad { get; set; }
+        public int ChannelNum { get; set; }
     }
 }

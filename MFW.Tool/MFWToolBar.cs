@@ -184,11 +184,7 @@ namespace MFW.Tool
                 return;
             try
             {
-                var signalWin = new SignalPanel()
-                {
-                    OnOk = () => { }
-                };
-                MFWCore.GetMediaStatistics(signalWin.BindSignals);
+                var signalWin = new SignalPanel();
                 UXMessageMask.ShowForm(ownerPnl, signalWin);
             }
             catch(Exception ex)

@@ -79,6 +79,9 @@
     <EmbeddedResource Include="UX\ContentSelectPanel.resx">
       <DependentUpon>ContentSelectPanel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UX\SignalPanel.resx">
+      <DependentUpon>SignalPanel.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\attender.png" />

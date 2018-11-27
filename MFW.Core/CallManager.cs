@@ -89,15 +89,9 @@ namespace MFW.Core
                 #region Call
                 case EventType.SIP_CALL_INCOMING:
                     {
-                        var call = new Call(evt.CallHandle)
-                        {
-                            CallName = evt.CallerName,
-                            CallMode = evt.CallMode,
-                            CallState = CallState.SIP_INCOMING_INVITE,
-                            StartTime=DateTime.Now,
-                            CallType= CallType.INCOMING
-                        };
-                        CallList.Add(call);
+                        var call = GetCall(evt.CallHandle, true, evt);
+                        call.CallType = CallType.INCOMING;
+                        call.CallState = CallState.SIP_INCOMING_INVITE;
 
                         var msg = string.Format("【{0}】呼入中，是否接听？", evt.CallerName);
 
@@ -142,15 +136,9 @@ namespace MFW.Core
                             log.Info(string.Format("挂断呼叫{0}", _currentCall.CallName));
                             WrapperProxy.TerminateCall(_currentCall.CallHandle);
                         }
-                        var call = new Call(evt.CallHandle)
-                        {
-                            CallName = evt.CallerName,
-                            CallMode = evt.CallMode,
-                            CallState = CallState.SIP_INCOMING_INVITE,
-                            StartTime = DateTime.Now,
-                            CallType = CallType.OUTGOING
-                        };
-                        CallList.Add(call);
+                        var call = GetCall(evt.CallHandle, true, evt);
+                        call.CallType = CallType.OUTGOING;
+                        call.CallState = CallState.SIP_OUTGOING_TRYING;
                         evt.Call=call;
                         CurrentCall=call;
                         var localChannel = new Channel(call, 0, MediaType.LOCAL, false) {

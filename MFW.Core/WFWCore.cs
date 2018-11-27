@@ -612,14 +612,14 @@ namespace MFW.Core
         }
 
 
-        private static void DisplayMediaStatisticsCallbackF(IntPtr channelNamePtr, IntPtr strParticipantNamePtr, IntPtr remoteSystemIdPtr, IntPtr callRatePtr, IntPtr packetsLostPtr, IntPtr packetLossPtr,
+        private static void DisplayMediaStatisticsCallbackF(IntPtr channelNamePtr, IntPtr participantNamePtr, IntPtr remoteSystemIdPtr, IntPtr callRatePtr, IntPtr packetsLostPtr, IntPtr packetLossPtr,
                  IntPtr videoProtocolPtr, IntPtr videoRatePtr, IntPtr videoRateUsedPtr, IntPtr videoFrameRatePtr, IntPtr videoPacketsLostPtr, IntPtr videoJitterPtr,
                  IntPtr videoFormatPtr, IntPtr errorConcealmentPtr, IntPtr audioProtocolPtr, IntPtr audioRatePtr, IntPtr audioPacketsLostPtr, IntPtr audioJitterPtr,
                  IntPtr audioEncryptPtr, IntPtr videoEncryptPtr, IntPtr feccEncryptPtr, IntPtr audioReceivedPacketPtr, IntPtr roundTripTimePtr,
                  IntPtr fullIntraFrameRequestPtr, IntPtr intraFrameSentPtr, IntPtr packetsCountPtr, IntPtr overallCPULoadPtr, IntPtr channelNumPtr)
         {
             var channelName = IntPtrHelper.IntPtrTostring(channelNamePtr);
-            var strParticipantName = IntPtrHelper.IntPtrTostring(strParticipantNamePtr);
+            var participantName = IntPtrHelper.IntPtrTostring(participantNamePtr);
             var remoteSystemId = IntPtrHelper.IntPtrTostring(remoteSystemIdPtr);
             var callRate = IntPtrHelper.IntPtrTostring(callRatePtr);
             var packetsLost = IntPtrHelper.IntPtrTostring(packetsLostPtr);
@@ -651,7 +651,7 @@ namespace MFW.Core
                 var statistics = new MediaStatistics()
                 {
                     ChannelName = channelName,
-                    StrParticipantName = strParticipantName,
+                    ParticipantName = participantName,
                     RemoteSystemId = remoteSystemId,
                     CallRate = callRate,
                     PacketsLost = packetsLost,
@@ -676,7 +676,7 @@ namespace MFW.Core
                     FullIntraFrameRequest = fullIntraFrameRequest,
                     IntraFrameSent = intraFrameSent,
                     PacketsCount = packetsCount,
-                    overallCPULoad = overallCPULoad,
+                    OverallCPULoad = overallCPULoad,
                     ChannelNum = channelNo
                 };
                 MFWCore.mediaStatistics.Add(statistics);
