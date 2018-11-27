@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MFW.Core;
 
 namespace MFW.Tool.UX
 {
@@ -22,6 +23,12 @@ namespace MFW.Tool.UX
         {
             OnOk?.Invoke();
             this.Dispose();
+        }
+
+        public void BindSignals(IEnumerable<MediaStatistics> statistics)
+        {
+            this.grdMediaStatistics.DataSource = statistics;
+            this.grdMediaStatistics.Refresh();
         }
     }
 }
