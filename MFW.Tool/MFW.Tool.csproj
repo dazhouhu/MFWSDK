@@ -119,6 +119,7 @@
   <ItemGroup>
     <Content Include="Resources\cancel.png" />
     <Content Include="Resources\cancel24.png" />
+    <Content Include="Resources\close.png" />
     <Content Include="Resources\ok.png" />
     <Content Include="Resources\ok24.png" />
     <Content Include="Resources\signal0.png" />

@@ -28,12 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.grdMediaStatistics = new System.Windows.Forms.DataGridView();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.txtCallRate = new System.Windows.Forms.Label();
             this.lblCallRate = new System.Windows.Forms.Label();
             this.callCallType = new System.Windows.Forms.Label();
             this.lblCallType = new System.Windows.Forms.Label();
-            this.btnOK = new System.Windows.Forms.Button();
+            this.btnClose = new System.Windows.Forms.Button();
             this.ParticipantName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ChannelName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.VideoProtocol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -62,16 +66,26 @@
             this.IntraFrameSent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PacketsCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.overallCPULoad = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.grdMediaStatistics)).BeginInit();
+            grdMediaStatistics = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(grdMediaStatistics)).BeginInit();
             this.SuspendLayout();
             // 
             // grdMediaStatistics
             // 
-            this.grdMediaStatistics.AllowUserToAddRows = false;
-            this.grdMediaStatistics.AllowUserToDeleteRows = false;
-            this.grdMediaStatistics.BackgroundColor = System.Drawing.Color.Azure;
-            this.grdMediaStatistics.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.grdMediaStatistics.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            grdMediaStatistics.AllowUserToAddRows = false;
+            grdMediaStatistics.AllowUserToDeleteRows = false;
+            grdMediaStatistics.BackgroundColor = System.Drawing.Color.Azure;
+            grdMediaStatistics.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.DeepSkyBlue;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            grdMediaStatistics.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            grdMediaStatistics.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            grdMediaStatistics.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ParticipantName,
             this.ChannelName,
             this.VideoProtocol,
@@ -100,13 +114,35 @@
             this.IntraFrameSent,
             this.PacketsCount,
             this.overallCPULoad});
-            this.grdMediaStatistics.Location = new System.Drawing.Point(0, 36);
-            this.grdMediaStatistics.Margin = new System.Windows.Forms.Padding(0);
-            this.grdMediaStatistics.Name = "grdMediaStatistics";
-            this.grdMediaStatistics.ReadOnly = true;
-            this.grdMediaStatistics.RowTemplate.Height = 23;
-            this.grdMediaStatistics.Size = new System.Drawing.Size(700, 406);
-            this.grdMediaStatistics.TabIndex = 13;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.DeepSkyBlue;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            grdMediaStatistics.DefaultCellStyle = dataGridViewCellStyle3;
+            grdMediaStatistics.GridColor = System.Drawing.SystemColors.ControlLight;
+            grdMediaStatistics.Location = new System.Drawing.Point(0, 48);
+            grdMediaStatistics.Margin = new System.Windows.Forms.Padding(0);
+            grdMediaStatistics.Name = "grdMediaStatistics";
+            grdMediaStatistics.ReadOnly = true;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.DeepSkyBlue;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            grdMediaStatistics.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            grdMediaStatistics.RowHeadersVisible = false;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.DeepSkyBlue;
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.White;
+            grdMediaStatistics.RowsDefaultCellStyle = dataGridViewCellStyle5;
+            grdMediaStatistics.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.Color.SkyBlue;
+            grdMediaStatistics.RowTemplate.Height = 23;
+            grdMediaStatistics.Size = new System.Drawing.Size(700, 452);
+            grdMediaStatistics.TabIndex = 13;
             // 
             // txtCallRate
             // 
@@ -148,26 +184,22 @@
             this.lblCallType.TabIndex = 12;
             this.lblCallType.Text = "呼叫类型：";
             // 
-            // btnOK
+            // btnClose
             // 
-            this.btnOK.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnOK.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnOK.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnOK.Image = global::MFW.Tool.Properties.Resources.ok24;
-            this.btnOK.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnOK.Location = new System.Drawing.Point(305, 448);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(90, 40);
-            this.btnOK.TabIndex = 14;
-            this.btnOK.Text = "关闭  ";
-            this.btnOK.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnOK.UseVisualStyleBackColor = false;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnClose.Image = global::MFW.Tool.Properties.Resources.close;
+            this.btnClose.Location = new System.Drawing.Point(661, 13);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(25, 23);
+            this.btnClose.TabIndex = 14;
+            this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // ParticipantName
             // 
             this.ParticipantName.DataPropertyName = "ParticipantName";
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.DeepSkyBlue;
+            this.ParticipantName.DefaultCellStyle = dataGridViewCellStyle2;
             this.ParticipantName.HeaderText = "与会者";
             this.ParticipantName.Name = "ParticipantName";
             this.ParticipantName.ReadOnly = true;
@@ -366,8 +398,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SteelBlue;
-            this.Controls.Add(this.btnOK);
-            this.Controls.Add(this.grdMediaStatistics);
+            this.Controls.Add(this.btnClose);
+            this.Controls.Add(grdMediaStatistics);
             this.Controls.Add(this.txtCallRate);
             this.Controls.Add(this.lblCallRate);
             this.Controls.Add(this.callCallType);
@@ -376,20 +408,19 @@
             this.Name = "SignalPanel";
             this.Size = new System.Drawing.Size(700, 500);
             this.Load += new System.EventHandler(this.SignalPanel_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.grdMediaStatistics)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(grdMediaStatistics)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.DataGridView grdMediaStatistics;
+        System.Windows.Forms.DataGridView grdMediaStatistics;
         private System.Windows.Forms.Label txtCallRate;
         private System.Windows.Forms.Label lblCallRate;
         private System.Windows.Forms.Label callCallType;
         private System.Windows.Forms.Label lblCallType;
+        private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.DataGridViewTextBoxColumn ParticipantName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ChannelName;
         private System.Windows.Forms.DataGridViewTextBoxColumn VideoProtocol;

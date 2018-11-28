@@ -679,7 +679,10 @@ namespace MFW.Core
                     OverallCPULoad = overallCPULoad,
                     ChannelNum = channelNo
                 };
-                MFWCore.mediaStatistics.Add(statistics);
+                callView.Invoke(new Action(() =>
+                {
+                    MFWCore.mediaStatistics.Add(statistics);
+                }));
             }
         }
         private static void DisplayCallStatisticsCallbackF(int timeInLastCall, int totalTime, int callPlaced, int callReceived, int callConnected)

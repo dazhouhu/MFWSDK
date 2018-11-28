@@ -32,24 +32,18 @@ namespace MFW.Tool.UX
         }
         #endregion
 
-        public Action OnOk { get; set; }
-        private void btnOK_Click(object sender, EventArgs e)
+        public Action OnClose { get; set; }
+        private void btnClose_Click(object sender, EventArgs e)
         {
-            OnOk?.Invoke();
+            OnClose?.Invoke();
             this.Dispose();
         }
-
         public void BindSignals(IEnumerable<MediaStatistics> statistics)
         {
-            //var ds = statistics.ToList();
-            var ds = new List<MediaStatistics>()
-            {
-                new MediaStatistics(){ChannelName="1"},
-                new MediaStatistics(){ChannelName="2"},
-                new MediaStatistics(){ChannelName="3"},
-                new MediaStatistics(){ChannelName="4"},
-            };
+            var ds = statistics.ToList();
+           
             this.grdMediaStatistics.DataSource = ds;
+            this.grdMediaStatistics.Refresh();
         }
 
         private void SignalPanel_Load(object sender, EventArgs e)
@@ -57,9 +51,10 @@ namespace MFW.Tool.UX
             grdMediaStatistics.AutoGenerateColumns = false;
 
             MFWCore.GetMediaStatistics(BindSignals);
-
+            
             this.txtCallRate.Text = "SIP";
             this.txtCallRate.Text = propertyManager.GetProperty(PropertyKey.PLCM_MFW_KVLIST_KEY_CallSettings_NetworkCallRate);
         }
+        
     }
 }
